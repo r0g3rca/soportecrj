@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoporteCRJ | Sistema D3XD</title>
+    <style>
+        /* --- ESTILOS GENERALES --- */
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #00a8e8;
+            --accent-color: #ff9f1c;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --bg-light: #f4f7f6;
+            --text-dark: #333;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        header {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 1.5rem 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 { margin: 0; font-size: 1.8rem; }
+        header p { margin: 5px 0 0; opacity: 0.9; }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            display: grid;
+            gap: 30px;
+        }
+
+        /* --- TARJETAS --- */
+        .card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--primary-color);
+        }
+
+        h2 { color: var(--primary-color); text-align: center; margin-bottom: 20px; }
+
+        /* --- FORMULARIOS E INPUTS --- */
+        .form-group { margin-bottom: 15px; }
+        
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input:focus { border-color: var(--secondary-color); outline: none; }
+
+        /* --- BOTONES --- */
+        .btn-submit {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 12px;
+            width: 100%;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-submit:hover { background-color: #004494; }
+
+        /* --- ESTILOS ESPECÍFICOS DE LA BÚSQUEDA --- */
+        .search-box {
+            display: flex;
+            gap: 10px;
+        }
+        
+        #resultContainer {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none; /* Oculto por defecto */
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #eee;
+            padding: 8px 0;
+        }
+        .detail-row:last-child { border-bottom: none; }
+        .detail-label { font-weight: bold; color: #666; }
+
+        /* Colores de estado */
+        .bg-success { background-color: var(--success-color); color: white; }
+        .bg-danger { background-color: var(--danger-color); color: white; }
+        .bg-warning { background-color: var(--warning-color); color: #333; }
+
+        /* Footer */
+        footer { text-align: center; padding: 20px; color: #777; font-size: 0.9rem; }
+
+        @media (max-width: 600px) {
+            .search-box { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>SoporteCRJ</h1>
+        <p>Centro de Control y Soporte D3XD</p>
+    </header>
+
+    <div class="container">
+
+        <div class="card">
+            <h2>🔍 Consultar Estatus de Cliente</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 20px;">
+                Ingrese el RIF o Nombre de la empresa para verificar su plan y vencimiento.
+            </p>
+            
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Ej. J300739295 o 'Automotriz'">
+                <button class="btn-submit" style="width: auto; min-width: 120px;" onclick="buscarCliente()">Buscar</button>
+            </div>
+
+            <div id="resultContainer">
+                </div>
+        </div>
+
+        <div class="card">
+            <h2>📅 Agendar Soporte Técnico</h2>
+            <form id="supportForm">
+                <div class="form-group">
+                    <label>Tipo de Solicitud</label>
+                    <select id="tipoSolicitud" onchange="toggleDate()">
+                        <option value="Cita Técnica">Agendar Cita Presencial/Remota</option>
+                        <option value="Actualización">Solicitar Actualización</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="nombre">Nombre / Empresa</label>
+                    <input type="text" id="nombre" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="contacto">Teléfono / WhatsApp</label>
+                    <input type="tel" id="contacto" required>
+                </div>
+
+                <div class="form-group" id="dateGroup">
+                    <label for="fecha">Fecha Preferida</label>
+                    <input type="datetime-local" id="fecha">
+                </div>
+
+                <div class="form-group">
+                    <label for="mensaje">Detalles</label>
+                    <textarea id="mensaje" rows="3"></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">Enviar a WhatsApp</button>
+            </form>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Soportecrj - Sistema Administrativo D3XD</p>
+    </footer>
+
+    <script>
+        // --- BASE DE DATOS DE CLIENTES (JSON) ---
+        // He convertido tu lista en este formato para que el código la entienda
+        const dbClientes = [
+            { nombre: "UNIDAD EDUCATIVA ANTONIO BERTORELLI CISNEROS", rif: "J300739295", tipo: "Colegios", vencimiento: "2025-04-05" },
+            { nombre: "ARTESANOS DEL CAFE VII, C.A", rif: "J505015389", tipo: "Restaurant", vencimiento: "2026-12-31" },
+            { nombre: "AUTOACCESORIOS NANDOCARS23, C.A", rif: "J407963937", tipo: "Gisin3", vencimiento: "2025-04-05" },
+            { nombre: "AUTOMOTRIZ IDE, C.A.", rif: "J002389818", tipo: "Gisin3", vencimiento: "2026-05-03" },
+            { nombre: "BALF 147, C.A.", rif: "J409904920", tipo: "Restaurant", vencimiento: "2025-04-05" },
+            { nombre: "BAR RESTAURANT EL RINCON DEL BUCANERO C.A.", rif: "J001687602", tipo: "Restaurant", vencimiento: "2025-04-05" },
+            { nombre: "BODEGON MI CHIRINGUITO 111, C.A.", rif: "J412786253", tipo: "Restaurant", vencimiento: "2025-04-05" },
+            { nombre: "CASTANIA, C.A.", rif: "J412601750", tipo: "Gisin3", vencimiento: "2025-04-05" },
+            { nombre: "CCSLINK C.A", rif: "J504487376", tipo: "Gisin3", vencimiento: "2026-10-23" },
+            { nombre: "CENTRO DE ENTRENAMIENTO PERSONALIZADO IMAGE GYM C.A", rif: "J310883955", tipo: "Gisin3", vencimiento: "2025-04-05" },
+            { nombre: "CENTRO DE SERVICIOS GENERALES, S.A. C.S.A", rif: "J301239407", tipo: "Gisin3", vencimiento: "2025-04-05" },
+            { nombre: "COMERCIAL TUKI SABOR, C.A.", rif: "J312770309", tipo: "Gisin3", vencimiento: "2025-04-05" },
+            { nombre: "COMERCIALIZADORA ALPE GLASS, C.A", rif: "J294546951", tipo: "Gisin3", vencimiento: "2026-12-18" },
+            { nombre: "DISTRIBUIDORA CA-R1, C.A.", rif: "J502392661", tipo: "Gisin3", vencimiento: "2025-04-05" },
+            { nombre: "DISTRIBUIDORA VIEJO ALMACEN, C.A.", rif: "J304448368", tipo: "Retenciones", vencimiento: "2025-12-31" },
+            { nombre: "EL JARDIN DE MIRIAM C.A.", rif: "J504601586", tipo: "Restaurant", vencimiento: "2025-04-05" },
+            { nombre: "EL PANA MIO EB, C.A.", rif: "J502396675", tipo: "Gisin3", vencimiento: "2025-04-05" },
+            { nombre: "ELECTRONICA ISMARL E. I, C.A", rif: "J295276044", tipo: "Gisin3", vencimiento: "2025-04-05" },
+            { nombre: "GRUPO AROTOK 3000, C.A.", rif: "J502067949", tipo: "Gisin3", vencimiento: "2025-04-05" },
+            { nombre: "GRUPO COTECFA, C.A.", rif: "J405972610", tipo: "Gisin3", vencimiento: "2026-07-02" },
+            { nombre: "INVERSIONES BUFALAC 2023, C.A.", rif: "J504740039", tipo: "Gisin3", vencimiento: "2025-04-05" },
+            { nombre: "INVERSIONES CALICANTO, C.A.", rif: "J001200452", tipo: "Gisin3", vencimiento: "2026-06-13" },
+            { nombre: "INVERSIONES COCO SWEET, C.A.", rif: "J314545043", tipo: "Restaurant", vencimiento: "2025-04-05" },
+            { nombre: "INVERSIONES CREMA FANTASÍA C.A", rif: "J409224430", tipo: "Gisin3", vencimiento: "2025-04-05" },
+            { nombre: "INVERSIONES DAPET58, C.A", rif: "J406113018", tipo: "Gisin3", vencimiento: "2025-04-05" },
+            { nombre: "INVERSIONES FATIMA III BGMP13, C.A", rif: "J309841327", tipo: "Gisin3", vencimiento: "2025-04-05" },
+            { nombre: "INVERSIONES JK PLSU, C.A.", rif: "J413193574", tipo: "Gisin3", vencimiento: "2025-04-05" },
+            { nombre: "INVERSIONES LA CASA NOBLE CA", rif: "J309467700", tipo: "Restaurant", vencimiento: "2025-04-05" },
+            { nombre: "INVERSIONES LI HUA,C.A.", rif: "J400095018", tipo: "Gisin3", vencimiento: "2025-04-05" },
+            { nombre: "INVERSIONES MENZAM II 2023, C.A.", rif: "J503501138", tipo: "Gisin3", vencimiento: "2025-12-31" },
+            { nombre: "INVERSIONES OMI TOWA 745, C.A.", rif: "J413082586", tipo: "Gisin3", vencimiento: "2025-04-05" },
+            { nombre: "INVERSIONES RIOS 262, C.A.", rif: "J410074833", tipo: "Gisin3", vencimiento: "2025-04-05" },
+            { nombre: "LA FERIA EXPRESS 2020, C.A.", rif: "J500677391", tipo: "Gisin3", vencimiento: "2025-04-05" },
+            { nombre: "LA QUESERA REY DE REYES DE CATIA, C.A.", rif: "J4102070000", tipo: "Gisin3", vencimiento: "2025-04-05" },
+            { nombre: "MINI MARKET LA LLANADA, C.A.", rif: "J500362838", tipo: "Gisin3", vencimiento: "2025-04-05" },
+            { nombre: "MULTISERVICIOS TS 2023, C.A", rif: "J505044702", tipo: "Gisin3", vencimiento: "2026-05-05" },
+            { nombre: "P9 FOOD SERVICES, C.A.", rif: "J504849685", tipo: "Restaurant", vencimiento: "2026-06-20" },
+            { nombre: "PINTO´S PAN DELY, C.A.", rif: "J295254555", tipo: "Gisin3", vencimiento: "2025-04-05" },
+            { nombre: "REPUESTOS ELECTRIASIA 3.000, C.A.", rif: "J294968945", tipo: "Gisin3", vencimiento: "2026-04-05" },
+            { nombre: "REPUESTOS L & N 12-24V, C.A", rif: "J500863756", tipo: "Gisin3", vencimiento: "2026-11-03" },
+            { nombre: "RESTAURANT EL CARRETON, S.R.L", rif: "J002234415", tipo: "Restaurant", vencimiento: "2025-04-05" },
+            { nombre: "RESTAURANT EL FETUCCINE, C.A", rif: "J000923914", tipo: "Restaurant", vencimiento: "2026-06-30" },
+            { nombre: "SERVICIOS ESCALERO, C.A.", rif: "J500660979", tipo: "Hoteles", vencimiento: "2026-10-16" },
+            { nombre: "SERVICIOS VERTICEM, C.A.", rif: "J411160008", tipo: "Hoteles", vencimiento: "2026-10-09" },
+            { nombre: "SOPORTE CRJ, C.A.", rif: "J407133640", tipo: "Gisin3", vencimiento: "2026-04-05" },
+            { nombre: "SUPERMERCADO TORONTO 3000 C.A.", rif: "J506106698", tipo: "Gisin3", vencimiento: "2026-06-30" },
+            { nombre: "TALLERES LEO 245, C.A", rif: "J412983458", tipo: "Gisin3", vencimiento: "2025-04-05" },
+            { nombre: "THE BABY´S WORLD 29, C.A.", rif: "J402605099", tipo: "Gisin3", vencimiento: "2026-12-31" } // Fecha asumida por falta en data
+        ];
+
+        // --- FUNCIONES DE BÚSQUEDA ---
+        function buscarCliente() {
+            const input = document.getElementById('searchInput').value.trim().toUpperCase();
+            const container = document.getElementById('resultContainer');
+            
+            // Si está vacío, no hacer nada
+            if(input === "") {
+                alert("Por favor escribe un RIF o Nombre.");
+                return;
+            }
+
+            // Buscar en la base de datos (por Nombre o RIF)
+            const cliente = dbClientes.find(c => c.rif.includes(input) || c.nombre.toUpperCase().includes(input));
+
+            if (cliente) {
+                // Calcular Estatus de Fecha
+                const hoy = new Date();
+                const fechaVence = new Date(cliente.vencimiento);
+                
+                // Diferencia en días
+                const diffTime = fechaVence - hoy;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+
+                let estadoClase = "";
+                let estadoTexto = "";
+
+                if (diffDays < 0) {
+                    estadoClase = "bg-danger";
+                    estadoTexto = "VENCIDO";
+                } else if (diffDays <= 30) {
+                    estadoClase = "bg-warning";
+                    estadoTexto = "VENCE PRONTO";
+                } else {
+                    estadoClase = "bg-success";
+                    estadoTexto = "ACTIVO";
+                }
+
+                // Mostrar HTML
+                container.style.display = "block";
+                container.className = estadoClase; // Pone el fondo del color
+                
+                // Renderizar contenido
+                container.innerHTML = `
+                    <div style="background: white; padding: 20px; border-radius: 5px; color: #333;">
+                        <h3 style="margin-top:0; border-bottom: 2px solid #eee; padding-bottom: 10px;">${cliente.nombre}</h3>
+                        
+                        <div class="detail-row">
+                            <span class="detail-label">Estatus:</span>
+                            <span class="status-badge ${estadoClase}">${estadoTexto}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">RIF:</span>
+                            <span>${cliente.rif}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Producto:</span>
+                            <span>${cliente.tipo} - Plan Completo</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Vencimiento:</span>
+                            <span style="font-weight:bold; font-size: 1.1em;">${cliente.vencimiento}</span>
+                        </div>
+                        <br>
+                        ${diffDays < 0 ? '<p style="color:red; font-weight:bold; text-align:center;">⚠️ Su servicio requiere renovación inmediata.</p>' : ''}
+                    </div>
+                `;
+
+            } else {
+                container.style.display = "block";
+                container.style.background = "#ffebee";
+                container.innerHTML = `<p style="color: #c62828; text-align: center; font-weight: bold;">❌ No encontramos ningún cliente con esos datos.</p>`;
+            }
+        }
+
+        // --- FUNCIONES DEL FORMULARIO DE CITAS ---
+        function toggleDate() {
+            const tipo = document.getElementById('tipoSolicitud').value;
+            const dateGroup = document.getElementById('dateGroup');
+            if (tipo === 'Actualización') {
+                dateGroup.style.display = 'none';
+            } else {
+                dateGroup.style.display = 'block';
+            }
+        }
+
+        document.getElementById('supportForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const nombre = document.getElementById('nombre').value;
+            const
