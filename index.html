@@ -100,3 +100,328 @@
             margin: 0 auto;
             padding: 40px 20px;
             display: grid;
+            gap: 40px;
+        }
+
+        /* --- TARJETAS --- */
+        .card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border-top: 5px solid var(--primary-color);
+            scroll-margin-top: 20px;
+        }
+
+        h2 { color: var(--primary-color); text-align: center; margin-bottom: 10px; }
+        .subtitle { text-align: center; color: #666; font-size: 0.9rem; margin-bottom: 25px; }
+
+        /* --- INPUTS & FORMULARIOS --- */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; color: #555; }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        input:focus { border-color: var(--secondary-color); outline: none; }
+
+        /* --- BUSCADOR --- */
+        .search-box { display: flex; gap: 10px; }
+        
+        .btn-action {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+        }
+        .btn-action:hover { background-color: #003d80; }
+        .btn-action:disabled { background-color: #ccc; cursor: not-allowed; }
+        
+        .btn-search { width: auto; min-width: 120px; }
+
+        /* --- RESULTADOS --- */
+        #resultContainer { margin-top: 20px; display: none; }
+        
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        .detail-row {
+            display: flex; justify-content: space-between;
+            border-bottom: 1px solid #eee; padding: 10px 0;
+        }
+
+        .bg-success { background: var(--success-color); color: white; }
+        .bg-danger { background: var(--danger-color); color: white; }
+        .bg-warning { background: var(--warning-color); color: #333; }
+
+        footer { text-align: center; padding: 40px 20px; color: #888; font-size: 0.9rem; }
+
+        /* --- BOTÓN FLOTANTE WHATSAPP --- */
+        .float-whatsapp {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 30px;
+            right: 30px;
+            background-color: #25d366;
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+
+        .float-whatsapp:hover {
+            transform: scale(1.1);
+            background-color: #128C7E;
+        }
+
+        @media (max-width: 600px) {
+            .search-box { flex-direction: column; }
+            .btn-search { width: 100%; }
+            .home-link { display: none; } /* Ocultar home en móviles si molesta */
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="home-link">🏠 Inicio</a>
+        <h1>SoporteCRJ</h1>
+        <p>Especialistas en Sistemas Administrativos D3XD</p>
+        
+        <div class="hero-buttons">
+            <a href="#seccion-consulta" class="btn-hero btn-consultar">🔍 Consultar Licencia</a>
+            <a href="#seccion-soporte" class="btn-hero btn-agendar">📅 Agendar Soporte</a>
+            <a href="contrato.html" class="btn-hero btn-contrato">📝 Generar Contrato</a>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <div id="seccion-consulta" class="card">
+            <h2>Estatus de Cliente</h2>
+            <p class="subtitle">Verifica el estado de tu plan y fecha de vencimiento</p>
+            
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Ingresa RIF o Nombre (Ej. J300739295)">
+                <button class="btn-action btn-search" onclick="buscarCliente()">Buscar</button>
+            </div>
+
+            <div id="resultContainer"></div>
+        </div>
+
+        <div id="seccion-soporte" class="card">
+            <h2>Solicitud de Soporte</h2>
+            <p class="subtitle">Envía tu requerimiento directamente a nuestro WhatsApp</p>
+            
+            <form id="supportForm">
+                <div class="form-group">
+                    <label>Tipo de Solicitud</label>
+                    <select id="tipoSolicitud" onchange="toggleDate()">
+                        <option value="Cita Técnica">Agendar Cita Presencial/Remota</option>
+                        <option value="Actualización">Solicitar Actualización D3XD</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Nombre / Empresa</label>
+                    <input type="text" id="nombre" required placeholder="Tu nombre o negocio">
+                </div>
+
+                <div class="form-group">
+                    <label>Teléfono / WhatsApp</label>
+                    <input type="tel" id="contacto" required placeholder="0412...">
+                </div>
+
+                <div class="form-group" id="dateGroup">
+                    <label>Fecha Preferida</label>
+                    <input type="datetime-local" id="fecha">
+                </div>
+
+                <div class="form-group">
+                    <label>Detalles</label>
+                    <textarea id="mensaje" rows="3" placeholder="Describe brevemente lo que necesitas..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-action">Enviar Solicitud 🚀</button>
+            </form>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Soportecrj - Soluciones Tecnológicas.</p>
+    </footer>
+
+    <a href="https://wa.me/584129020243?text=quiero%20asistencia%20con%20mi%20sistema" class="float-whatsapp" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24" fill="white"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+    </a>
+
+    <script>
+        // --- CONFIGURACIÓN ---
+        // Tu URL de Google Apps Script ya integrada:
+        const URL_API = "https://script.google.com/macros/s/AKfycbyiqN3cH27fbCs2AWWByBgzx0MhIlPfiOtOOC9qBsFs-nIpQXhP4wN6Y0pXpqL4LuOl/exec";
+        
+        // NÚMERO DE WHATSAPP DEL BOTÓN Y FORMULARIO
+        const TELEFONO_SOPORTE = "584129020243"; 
+
+        // --- LÓGICA DE BÚSQUEDA (CONECTADA A GOOGLE SHEETS) ---
+        function buscarCliente() {
+            const input = document.getElementById('searchInput').value.trim();
+            const container = document.getElementById('resultContainer');
+            const btnBuscar = document.querySelector('.btn-search');
+
+            if(input === "") { alert("Por favor escribe un RIF o Nombre."); return; }
+
+            // Mostrar estado de carga
+            btnBuscar.textContent = "Buscando...";
+            btnBuscar.disabled = true;
+            container.style.display = "none";
+
+            // Petición a la API
+            fetch(`${URL_API}?action=buscar&q=${input}`)
+            .then(response => response.json())
+            .then(data => {
+                btnBuscar.textContent = "Buscar";
+                btnBuscar.disabled = false;
+                
+                if (data.length > 0) {
+                    mostrarResultado(data[0]); 
+                } else {
+                    container.style.display = "block";
+                    container.innerHTML = `<p style="color: #dc3545; text-align: center; font-weight: bold; padding: 10px; background: #ffebee; border-radius:5px;">❌ Cliente no encontrado en nuestra base de datos.</p>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                btnBuscar.textContent = "Buscar";
+                btnBuscar.disabled = false;
+                alert("Error de conexión. Verifica tu internet.");
+            });
+        }
+
+        function mostrarResultado(cliente) {
+            const container = document.getElementById('resultContainer');
+            
+            // Calculamos días restantes para vencer
+            const hoy = new Date();
+            const fechaVence = new Date(cliente.vencimiento);
+            const diffTime = fechaVence - hoy;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+
+            let estadoClase = "", estadoTexto = "";
+
+            if (diffDays < 0) {
+                estadoClase = "bg-danger"; estadoTexto = "VENCIDO";
+            } else if (diffDays <= 30) {
+                estadoClase = "bg-warning"; estadoTexto = "VENCE PRONTO";
+            } else {
+                estadoClase = "bg-success"; estadoTexto = "ACTIVO";
+            }
+
+            container.style.display = "block";
+            container.innerHTML = `
+                <div style="background: #f8f9fa; border: 1px solid #ddd; padding: 20px; border-radius: 8px;">
+                    <h3 style="margin-top:0; color: #333;">${cliente.nombre}</h3>
+                    <div class="detail-row">
+                        <span>Estatus:</span> <span class="status-badge ${estadoClase}">${estadoTexto}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span>RIF:</span> <strong>${cliente.rif}</strong>
+                    </div>
+                    <div class="detail-row">
+                        <span>Producto:</span> <span>${cliente.tipo}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span>Vencimiento:</span> <strong>${cliente.vencimiento}</strong>
+                    </div>
+                    ${diffDays < 0 ? '<p style="color:red; text-align:center; font-weight:bold; margin-top:10px;">⚠️ Comunícate con soporte para renovar.</p>' : ''}
+                </div>
+            `;
+        }
+
+        // --- LÓGICA DE FORMULARIO (GUARDA EN SHEET Y ENVÍA WHATSAPP) ---
+        function toggleDate() {
+            const tipo = document.getElementById('tipoSolicitud').value;
+            const dateGroup = document.getElementById('dateGroup');
+            dateGroup.style.display = (tipo === 'Actualización') ? 'none' : 'block';
+        }
+
+        document.getElementById('supportForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const btnSubmit = document.querySelector('.btn-action[type="submit"]');
+            const textoOriginal = btnSubmit.textContent;
+            
+            // Recopilar datos
+            const datos = {
+                tipo: document.getElementById('tipoSolicitud').value,
+                nombre: document.getElementById('nombre').value,
+                contacto: document.getElementById('contacto').value,
+                mensaje: document.getElementById('mensaje').value,
+                fecha: document.getElementById('fecha').value
+            };
+
+            btnSubmit.textContent = "Procesando...";
+            btnSubmit.disabled = true;
+
+            // Enviar a Google Sheets
+            fetch(URL_API, {
+                method: 'POST',
+                mode: 'no-cors', 
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datos)
+            })
+            .then(() => {
+                // Generar enlace WhatsApp
+                let textoWS = `Hola Soportecrj, soy *${datos.nombre}*.%0A%0ASolicito: *${datos.tipo}*%0AContacto: ${datos.contacto}`;
+                if (datos.tipo !== 'Actualización' && datos.fecha) textoWS += `%0AFecha sugerida: ${datos.fecha}`;
+                textoWS += `%0ADetalles: ${datos.mensaje}`;
+                
+                // Abrir WhatsApp
+                window.open(`https://wa.me/${TELEFONO_SOPORTE}?text=${textoWS}`, '_blank');
+                
+                // Restaurar botón y limpiar formulario
+                btnSubmit.textContent = textoOriginal;
+                btnSubmit.disabled = false;
+                document.getElementById('supportForm').reset();
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Abriendo WhatsApp...");
+                let textoWS = `Hola Soportecrj, soy *${datos.nombre}*. (Error al guardar en sistema)`;
+                window.open(`https://wa.me/${TELEFONO_SOPORTE}?text=${textoWS}`, '_blank');
+                
+                btnSubmit.textContent = textoOriginal;
+                btnSubmit.disabled = false;
+            });
+        });
+    </script>
+</body>
+</html>
