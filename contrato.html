@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generar Contrato | SoporteCRJ</title>
+    <style>
+        :root {
+            --primary: #0056b3;
+            --secondary: #f4f7f6;
+            --text: #333;
+        }
+        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; margin: 0; color: var(--text); background: var(--secondary); }
+        
+        /* ESTILOS DE PANTALLA (FORMULARIO) */
+        .container { max-width: 900px; margin: 30px auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1, h2 { color: var(--primary); text-align: center; }
+        
+        .form-section { margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+        .form-section h3 { color: #555; margin-bottom: 15px; text-decoration: underline; }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9rem; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        
+        .btn-group { text-align: center; margin-top: 30px; display: flex; gap: 10px; justify-content: center; }
+        button { padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem; font-weight: bold; transition: 0.3s; }
+        .btn-generate { background: var(--primary); color: white; }
+        .btn-print { background: #28a745; color: white; display: none; } /* Oculto al inicio */
+        .btn-edit { background: #ffc107; color: #333; display: none; }
+        
+        /* ESTILOS DEL DOCUMENTO LEGAL (OCULTO AL INICIO) */
+        #documentoFinal { display: none; padding: 20px; font-family: "Times New Roman", Times, serif; font-size: 12pt; line-height: 1.5; text-align: justify; }
+        .doc-header { text-align: center; font-weight: bold; margin-bottom: 20px; text-transform: uppercase; }
+        .doc-firmas { margin-top: 60px; display: flex; justify-content: space-between; }
+        .firma-box { width: 45%; border-top: 1px solid #000; text-align: center; padding-top: 10px; }
+        .resaltado { font-weight: bold; }
+
+        /* ESTILOS PARA IMPRESIÓN */
+        @media print {
+            body { background: white; }
+            .container { box-shadow: none; margin: 0; padding: 0; width: 100%; max-width: 100%; }
+            #formularioInput, .btn-group, h1 { display: none !important; }
+            #documentoFinal { display: block !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 id="tituloPagina">Generador de Contrato de Servicio</h1>
+
+        <div id="formularioInput">
+            <p style="text-align:center; color:#666;">Complete los datos para generar el documento legal.</p>
+            
+            <div class="form-section">
+                <h3>Datos del Cliente</h3>
+                <div class="grid-2">
+                    <div><label>Razón Social / Cliente:</label><input type="text" id="clienteNombre"></div>
+                    <div><label>RIF Cliente:</label><input type="text" id="clienteRif"></div>
+                    <div><label>Dirección Fiscal:</label><input type="text" id="clienteDireccion"></div>
+                    <div><label>Representante Legal (Nombre):</label><input type="text" id="repNombre"></div>
+                    <div><label>Cédula Representante (V-):</label><input type="text" id="repCedula"></div>
+                    <div><label>Teléfono / Correo:</label><input type="text" id="repContacto"></div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Datos del Sistema y Licencia</h3>
+                <div class="grid-2">
+                    <div><label>Nombre del Sistema:</label><input type="text" id="sisNombre" value="D3XD Administrativo"></div>
+                    <div><label>Versión Instalda:</label><input type="text" id="sisVersion" placeholder="Ej. 1135"></div>
+                    <div><label>Fecha de Instalación:</label><input type="date" id="sisFecha"></div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Equipos y Facturación</h3>
+                <div class="grid-2">
+                    <div>
+                        <label>¿Posee Impresora Fiscal?</label>
+                        <select id="eqFiscal">
+                            <option value="No">No</option>
+                            <option value="Si">Sí</option>
+                        </select>
+                    </div>
+                    <div><label>Modelos / Seriales (Si aplica):</label><input type="text" id="eqDetalles" placeholder="Ej. HKA-80, Serial X..."></div>
+                    <div>
+                        <label>Facturación Forma Libre:</label>
+                        <select id="eqFormaLibre"><option value="No">No</option><option value="Si">Sí</option></select>
+                    </div>
+                    <div>
+                        <label>Facturación Digital:</label>
+                        <select id="eqDigital"><option value="No">No</option><option value="Si">Sí</option></select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Infraestructura</h3>
+                <label>Descripción de Equipos (Computadores, Tablets, Tickeras):</label>
+                <input type="text" id="infraestructura" placeholder="Ej. 1 Servidor, 2 Cajas, 1 Comandera...">
+            </div>
+        </div>
+
+        <div id="documentoFinal">
+            <div class="doc-header">
+                CONTRATO DE PRESTACIÓN DE SERVICIOS POR IMPLEMENTACIÓN DE SOFTWARE ADMINISTRATIVOS E INFORMÁTICOS HOMOLOGADOS POR EL SENIAT.
+            </div>
+
+            <p>
+                Entre el Profesional: <b>ROGER WILFREDO CASTILLO BARRAGAN</b>, titular del RIF <b>V-14909537-0</b>, quien representa a la empresa <b>SOPORTE CRJ, C.A.</b>, Rif: <b>J-40713364-0</b> con domicilio en AV FINAL PASEO COLON EDF TACHIRA PISO PB LOCAL 1 URB LOS CAOBOS CARACAS, quien en lo sucesivo se determinará como "PRESTADOR DE SERVICIO".
+            </p>
+            <p>
+                Y por la otra parte la empresa: <span class="resaltado" id="doc_cliente"></span>, con RIF <span class="resaltado" id="doc_rif"></span>, domiciliado en <span class="resaltado" id="doc_direccion"></span>, representado en este acto por <span class="resaltado" id="doc_rep"></span>, titular de la Cédula de Identidad Nro. <span class="resaltado" id="doc_ci"></span>, en lo sucesivo "EL CLIENTE".
+            </p>
+
+            <p><b>Objeto del Contrato:</b> Determinar las responsabilidades y condiciones de la implementación de SISTEMA ADMINISTRATIVO para los procesos de facturación y control de inventarios bajo el esquema determinado por el SENIAT según las providencias Administrativas <b>SNAT/2024/000102</b> y <b>SNAT/2024/000121</b>.</p>
+
+            <p><b>Del Sistema Administrativo Homologado:</b></p>
+            <ul>
+                <li>Nombre del Sistema: <span id="doc_sisNombre"></span></li>
+                <li>Versión del Sistema: <span id="doc_sisVersion"></span></li>
+                <li>Actualizado en fecha: <span id="doc_sisFecha"></span></li>
+            </ul>
+            <p>El cliente entiende que el sistema se renueva de forma anual y maneja un costo extra por cada equipo adicional.</p>
+
+            <p><b>De los métodos de facturación:</b></p>
+            <ul>
+                <li>Equipo Fiscal: <span id="doc_fiscal"></span>. Detalles: <span id="doc_fiscalDet"></span></li>
+                <li>Forma Libre: <span id="doc_libre"></span>.</li>
+                <li>Facturación Digital: <span id="doc_digital"></span>.</li>
+            </ul>
+
+            <p><b>De la infraestructura:</b> <span id="doc_infra"></span></p>
+
+            <p><b>Conformidad y Responsabilidades Legales:</b><br>
+            El cliente manifiesta que no se implementó ningún método tecnológico fraudulento que permita la evasión de impuestos. Cualquier irregularidad posterior a este contrato es responsabilidad única del cliente firmante.</p>
+
+            <div class="doc-firmas">
+                <div class="firma-box">
+                    EL CLIENTE<br>
+                    <span id="doc_firmaRep"></span><br>
+                    C.I: <span id="doc_firmaCI"></span>
+                </div>
+                <div class="firma-box">
+                    PRESTADOR DE SERVICIO<br>
+                    ROGER CASTILLO<br>
+                    SOPORTE CRJ, C.A.<br>
+                    RIF: J-40713364-0
+                </div>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn-generate" onclick="generarContrato()">📝 Generar Contrato</button>
+            <button class="btn-edit" onclick="editar()">✏️ Editar</button>
+            <button class="btn-print" onclick="window.print()">🖨️ Imprimir / PDF</button>
+        </div>
+        
+        <div style="text-align:center; margin-top:20px;">
+            <a href="index.html" style="color:var(--primary); text-decoration:none;">← Volver al Inicio</a>
+        </div>
+
+    </div>
+
+    <script>
+        function generarContrato() {
+            // 1. Capturar valores
+            document.getElementById('doc_cliente').innerText = document.getElementById('clienteNombre').value.toUpperCase();
+            document.getElementById('doc_rif').innerText = document.getElementById('clienteRif').value.toUpperCase();
+            document.getElementById('doc_direccion').innerText = document.getElementById('clienteDireccion').value.toUpperCase();
+            document.getElementById('doc_rep').innerText = document.getElementById('repNombre').value.toUpperCase();
+            document.getElementById('doc_ci').innerText = document.getElementById('repCedula').value;
+            
+            document.getElementById('doc_sisNombre').innerText = document.getElementById('sisNombre').value;
+            document.getElementById('doc_sisVersion').innerText = document.getElementById('sisVersion').value;
+            document.getElementById('doc_sisFecha').innerText = document.getElementById('sisFecha').value;
+
+            document.getElementById('doc_fiscal').innerText = document.getElementById('eqFiscal').value;
+            document.getElementById('doc_fiscalDet').innerText = document.getElementById('eqDetalles').value || "N/A";
+            document.getElementById('doc_libre').innerText = document.getElementById('eqFormaLibre').value;
+            document.getElementById('doc_digital').innerText = document.getElementById('eqDigital').value;
+            
+            document.getElementById('doc_infra').innerText = document.getElementById('infraestructura').value;
+            
+            // Datos para la firma
+            document.getElementById('doc_firmaRep').innerText = document.getElementById('repNombre').value.toUpperCase();
+            document.getElementById('doc_firmaCI').innerText = document.getElementById('repCedula').value;
+
+            // 2. Cambiar vista
+            document.getElementById('formularioInput').style.display = 'none';
+            document.getElementById('tituloPagina').style.display = 'none';
+            document.getElementById('documentoFinal').style.display = 'block';
+            
+            // 3. Manejar botones
+            document.querySelector('.btn-generate').style.display = 'none';
+            document.querySelector('.btn-print').style.display = 'inline-block';
+            document.querySelector('.btn-edit').style.display = 'inline-block';
+        }
+
+        function editar() {
+            document.getElementById('formularioInput').style.display = 'block';
+            document.getElementById('tituloPagina').style.display = 'block';
+            document.getElementById('documentoFinal').style.display = 'none';
+            
+            document.querySelector('.btn-generate').style.display = 'inline-block';
+            document.querySelector('.btn-print').style.display = 'none';
+            document.querySelector('.btn-edit').style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>
