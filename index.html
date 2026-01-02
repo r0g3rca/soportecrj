@@ -5,16 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SoporteCRJ | Centro de Ayuda D3XD</title>
     <style>
-        /* --- ESTILOS GENERALES --- */
+        /* --- PALETA DE COLORES CORPORATIVA (Extraída del Logo) --- */
         :root {
-            --primary-color: #0056b3;
-            --secondary-color: #00a8e8;
-            --accent-color: #ff9f1c;
-            --success-color: #28a745;
-            --danger-color: #dc3545;
-            --warning-color: #ffc107;
-            --bg-light: #f4f7f6;
+            --primary-blue: #142850;   /* Azul Oscuro del Logo */
+            --secondary-blue: #27496d; /* Azul Medio */
+            --accent-orange: #e65100;  /* Naranja de la "R" */
+            --bg-color: #f0f2f5;       /* Fondo gris suave */
             --white: #ffffff;
+            --text-dark: #333;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
         }
 
         html { scroll-behavior: smooth; }
@@ -23,102 +24,159 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: var(--bg-light);
-            color: #333;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
             line-height: 1.6;
         }
 
-        /* --- HEADER & HERO SECTION --- */
+        /* --- HEADER (Ahora Blanco para resaltar el Logo) --- */
         header {
-            background: linear-gradient(135deg, #004085 0%, #0056b3 100%);
-            color: var(--white);
-            padding: 40px 20px;
+            background: var(--white);
+            padding: 15px 20px;
             text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-bottom: 4px solid var(--primary-blue);
             position: relative;
         }
 
-        /* Botón HOME en el header */
+        /* Logo Imagen */
+        .logo-img {
+            max-width: 250px; /* Tamaño del logo */
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: var(--secondary-blue);
+            font-weight: 500;
+            margin: 5px 0 15px;
+        }
+
+        /* Botón HOME */
         .home-link {
             position: absolute;
             top: 20px;
             left: 20px;
-            color: white;
+            color: var(--primary-blue);
             text-decoration: none;
             font-weight: bold;
-            font-size: 1.1rem;
             display: flex;
             align-items: center;
             gap: 5px;
+            font-size: 0.9rem;
         }
-        .home-link:hover { text-decoration: underline; }
+        .home-link:hover { color: var(--accent-orange); }
 
-        header h1 { margin: 0; font-size: 2.2rem; }
-        header p { margin: 10px 0 20px; opacity: 0.9; font-size: 1.1rem; }
-
-        /* Botones del Banner */
+        /* --- BOTONES DEL HERO --- */
         .hero-buttons {
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin-top: 25px;
+            margin-top: 15px;
             flex-wrap: wrap;
         }
 
         .btn-hero {
-            padding: 12px 25px;
-            border-radius: 30px;
+            padding: 10px 25px;
+            border-radius: 50px;
             text-decoration: none;
             font-weight: bold;
-            transition: transform 0.2s, box-shadow 0.2s;
-            display: inline-block;
+            transition: all 0.3s;
             text-align: center;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
         .btn-consultar {
-            background-color: var(--accent-color);
-            color: #fff;
-            box-shadow: 0 4px 10px rgba(255, 159, 28, 0.4);
+            background-color: var(--primary-blue);
+            color: var(--white);
         }
+        .btn-consultar:hover { background-color: #0f1e3c; transform: translateY(-2px); }
 
         .btn-agendar {
-            background-color: rgba(255,255,255,0.2);
-            color: #fff;
-            border: 2px solid rgba(255,255,255,0.5);
+            background-color: var(--accent-orange);
+            color: var(--white);
         }
+        .btn-agendar:hover { background-color: #cc4600; transform: translateY(-2px); }
         
         .btn-contrato {
-            background-color: white;
-            color: var(--primary-color);
-            border: 2px solid white;
+            background-color: var(--white);
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+        }
+        .btn-contrato:hover { background-color: #f0f8ff; }
+
+        /* --- LAYOUT PRINCIPAL (3 COLUMNAS: PUBLICIDAD - CONTENIDO - PUBLICIDAD) --- */
+        .main-layout {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            max-width: 1400px; /* Ancho máximo para pantallas grandes */
+            margin: 30px auto;
+            padding: 0 20px;
+            align-items: flex-start;
         }
 
-        .btn-hero:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.2); }
-
-        /* --- CONTENEDOR PRINCIPAL --- */
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px 20px;
+        /* Contenedor Central (El sistema) */
+        .center-content {
+            flex: 2; /* Toma más espacio */
+            max-width: 800px;
             display: grid;
-            gap: 40px;
+            gap: 30px;
         }
 
-        /* --- TARJETAS --- */
+        /* Barras Laterales (Publicidad) */
+        .sidebar {
+            flex: 1; /* Toma menos espacio */
+            max-width: 250px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: sticky;
+            top: 20px; /* Se queda fijo al bajar */
+        }
+
+        /* Estilos de los Banners de Publicidad */
+        .ad-banner {
+            background: linear-gradient(135deg, var(--secondary-blue), var(--primary-blue));
+            color: white;
+            padding: 30px 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .ad-banner:hover { transform: scale(1.02); }
+        .ad-banner h3 { margin-top: 0; color: var(--accent-orange); }
+        .ad-banner p { font-size: 0.9rem; opacity: 0.9; }
+        .ad-btn {
+            display: inline-block;
+            margin-top: 15px;
+            background: var(--white);
+            color: var(--primary-blue);
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        /* --- TARJETAS DEL SISTEMA --- */
         .card {
             background: var(--white);
             padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            border-top: 5px solid var(--primary-color);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--accent-orange); /* Toque Naranja */
             scroll-margin-top: 20px;
         }
 
-        h2 { color: var(--primary-color); text-align: center; margin-bottom: 10px; }
+        h2 { color: var(--primary-blue); text-align: center; margin-bottom: 10px; }
         .subtitle { text-align: center; color: #666; font-size: 0.9rem; margin-bottom: 25px; }
 
-        /* --- INPUTS & FORMULARIOS --- */
+        /* INPUTS */
         .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: 600; color: #555; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; color: #444; }
         
         input, select, textarea {
             width: 100%;
@@ -127,14 +185,19 @@
             border-radius: 8px;
             font-size: 1rem;
             box-sizing: border-box;
+            background: #f9f9f9;
         }
-        input:focus { border-color: var(--secondary-color); outline: none; }
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent-orange);
+            outline: none;
+            background: #fff;
+        }
 
-        /* --- BUSCADOR --- */
+        /* BUSCADOR */
         .search-box { display: flex; gap: 10px; }
         
         .btn-action {
-            background-color: var(--primary-color);
+            background-color: var(--primary-blue);
             color: white;
             border: none;
             padding: 12px;
@@ -145,12 +208,12 @@
             width: 100%;
             transition: background 0.3s;
         }
-        .btn-action:hover { background-color: #003d80; }
+        .btn-action:hover { background-color: var(--accent-orange); }
         .btn-action:disabled { background-color: #ccc; cursor: not-allowed; }
         
         .btn-search { width: auto; min-width: 120px; }
 
-        /* --- RESULTADOS --- */
+        /* RESULTADOS */
         #resultContainer { margin-top: 20px; display: none; }
         
         .status-badge {
@@ -167,42 +230,35 @@
             border-bottom: 1px solid #eee; padding: 10px 0;
         }
 
-        .bg-success { background: var(--success-color); color: white; }
-        .bg-danger { background: var(--danger-color); color: white; }
-        .bg-warning { background: var(--warning-color); color: #333; }
+        .bg-success { background: var(--success); }
+        .bg-danger { background: var(--danger); }
+        .bg-warning { background: var(--warning); color: #333; }
 
-        footer { text-align: center; padding: 40px 20px; color: #888; font-size: 0.9rem; }
+        footer { text-align: center; padding: 40px 20px; color: #888; font-size: 0.9rem; background: #e9ecef; margin-top: 40px; }
 
-        /* --- BOTÓN FLOTANTE WHATSAPP --- */
+        /* WHATSAPP FLOTANTE */
         .float-whatsapp {
-            position: fixed;
-            width: 60px;
-            height: 60px;
-            bottom: 30px;
-            right: 30px;
-            background-color: #25d366;
-            color: #FFF;
-            border-radius: 50px;
-            text-align: center;
-            font-size: 30px;
-            box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            transition: transform 0.3s;
+            position: fixed; width: 60px; height: 60px; bottom: 30px; right: 30px;
+            background-color: #25d366; color: #FFF; border-radius: 50px;
+            text-align: center; font-size: 30px; box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+            z-index: 100; display: flex; align-items: center; justify-content: center;
+            text-decoration: none; transition: transform 0.3s;
         }
+        .float-whatsapp:hover { transform: scale(1.1); background-color: #128C7E; }
 
-        .float-whatsapp:hover {
-            transform: scale(1.1);
-            background-color: #128C7E;
+        /* --- MEDIA QUERIES (RESPONSIVO) --- */
+        /* Ocultar publicidad en tablets y celulares */
+        @media (max-width: 1000px) {
+            .sidebar { display: none; }
+            .main-layout { display: block; }
+            .center-content { max-width: 100%; }
         }
 
         @media (max-width: 600px) {
             .search-box { flex-direction: column; }
             .btn-search { width: 100%; }
-            .home-link { display: none; } /* Ocultar home en móviles si molesta */
+            .home-link { display: none; }
+            .logo-img { max-width: 200px; }
         }
     </style>
 </head>
@@ -210,71 +266,103 @@
 
     <header>
         <a href="index.html" class="home-link">🏠 Inicio</a>
-        <h1>SoporteCRJ</h1>
+        
+        <img src="logo.png" alt="SoporteCRJ Logo" class="logo-img">
+        
         <p>Especialistas en Sistemas Administrativos D3XD</p>
         
         <div class="hero-buttons">
             <a href="#seccion-consulta" class="btn-hero btn-consultar">🔍 Consultar Licencia</a>
             <a href="#seccion-soporte" class="btn-hero btn-agendar">📅 Agendar Soporte</a>
-            <a href="contrato.html" class="btn-hero btn-contrato">📝 Generar Contrato</a>
+            <a href="contrato.html" class="btn-hero btn-contrato">📝 Contrato Servicio</a>
         </div>
     </header>
 
-    <div class="container">
+    <div class="main-layout">
 
-        <div id="seccion-consulta" class="card">
-            <h2>Estatus de Cliente</h2>
-            <p class="subtitle">Verifica el estado de tu plan y fecha de vencimiento</p>
+        <aside class="sidebar">
+            <div class="ad-banner">
+                <h3>🚀 D3XD 2026</h3>
+                <p>¡Actualiza a la última versión y evita multas!</p>
+                <a href="#seccion-soporte" class="ad-btn">Solicitar Info</a>
+            </div>
+            <div class="ad-banner" style="background: linear-gradient(135deg, #e65100, #ff8f00);">
+                <h3>Impresoras Fiscales</h3>
+                <p>Mantenimiento preventivo y cambio de memoria.</p>
+                <a href="#seccion-soporte" class="ad-btn">Agendar</a>
+            </div>
+        </aside>
+
+        <main class="center-content">
             
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Ingresa RIF o Nombre (Ej. J300739295)">
-                <button class="btn-action btn-search" onclick="buscarCliente()">Buscar</button>
+            <div id="seccion-consulta" class="card">
+                <h2>Estatus de Cliente</h2>
+                <p class="subtitle">Verifica el estado de tu plan y fecha de vencimiento</p>
+                
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Ingresa RIF o Nombre (Ej. J300739295)">
+                    <button class="btn-action btn-search" onclick="buscarCliente()">Buscar</button>
+                </div>
+
+                <div id="resultContainer"></div>
             </div>
 
-            <div id="resultContainer"></div>
-        </div>
+            <div id="seccion-soporte" class="card">
+                <h2>Solicitud de Soporte</h2>
+                <p class="subtitle">Envía tu requerimiento directamente a nuestro WhatsApp</p>
+                
+                <form id="supportForm">
+                    <div class="form-group">
+                        <label>Tipo de Solicitud</label>
+                        <select id="tipoSolicitud" onchange="toggleDate()">
+                            <option value="Cita Técnica">Agendar Cita Presencial/Remota</option>
+                            <option value="Actualización">Solicitar Actualización D3XD</option>
+                        </select>
+                    </div>
 
-        <div id="seccion-soporte" class="card">
-            <h2>Solicitud de Soporte</h2>
-            <p class="subtitle">Envía tu requerimiento directamente a nuestro WhatsApp</p>
-            
-            <form id="supportForm">
-                <div class="form-group">
-                    <label>Tipo de Solicitud</label>
-                    <select id="tipoSolicitud" onchange="toggleDate()">
-                        <option value="Cita Técnica">Agendar Cita Presencial/Remota</option>
-                        <option value="Actualización">Solicitar Actualización D3XD</option>
-                    </select>
-                </div>
+                    <div class="form-group">
+                        <label>Nombre / Empresa</label>
+                        <input type="text" id="nombre" required placeholder="Tu nombre o negocio">
+                    </div>
 
-                <div class="form-group">
-                    <label>Nombre / Empresa</label>
-                    <input type="text" id="nombre" required placeholder="Tu nombre o negocio">
-                </div>
+                    <div class="form-group">
+                        <label>Teléfono / WhatsApp</label>
+                        <input type="tel" id="contacto" required placeholder="0412...">
+                    </div>
 
-                <div class="form-group">
-                    <label>Teléfono / WhatsApp</label>
-                    <input type="tel" id="contacto" required placeholder="0412...">
-                </div>
+                    <div class="form-group" id="dateGroup">
+                        <label>Fecha Preferida</label>
+                        <input type="datetime-local" id="fecha">
+                    </div>
 
-                <div class="form-group" id="dateGroup">
-                    <label>Fecha Preferida</label>
-                    <input type="datetime-local" id="fecha">
-                </div>
+                    <div class="form-group">
+                        <label>Detalles</label>
+                        <textarea id="mensaje" rows="3" placeholder="Describe brevemente lo que necesitas..."></textarea>
+                    </div>
 
-                <div class="form-group">
-                    <label>Detalles</label>
-                    <textarea id="mensaje" rows="3" placeholder="Describe brevemente lo que necesitas..."></textarea>
-                </div>
+                    <button type="submit" class="btn-action">Enviar Solicitud 🚀</button>
+                </form>
+            </div>
 
-                <button type="submit" class="btn-action">Enviar Solicitud 🚀</button>
-            </form>
-        </div>
+        </main>
+
+        <aside class="sidebar">
+            <div class="ad-banner" style="background: white; border: 2px solid var(--primary-blue); color: #333;">
+                <h3 style="color:var(--primary-blue)">Soporte Remoto</h3>
+                <p>Atención inmediata vía AnyDesk o TeamViewer.</p>
+                <a href="#seccion-soporte" class="ad-btn" style="background:var(--primary-blue); color:white;">Pedir Ayuda</a>
+            </div>
+            <div class="ad-banner">
+                <h3>Tu Espacio Aquí</h3>
+                <p>¿Quieres promocionar tu negocio en nuestra red?</p>
+                <span style="font-size:0.8rem; display:block; margin-top:10px;">Contáctanos</span>
+            </div>
+        </aside>
 
     </div>
 
     <footer>
-        <p>&copy; 2024 Soportecrj - Soluciones Tecnológicas.</p>
+        <p>&copy; 2026 Soportecrj - Soluciones Tecnológicas.</p>
     </footer>
 
     <a href="https://wa.me/584129020243?text=quiero%20asistencia%20con%20mi%20sistema" class="float-whatsapp" target="_blank">
@@ -283,13 +371,13 @@
 
     <script>
         // --- CONFIGURACIÓN ---
-        // Tu URL de Google Apps Script ya integrada:
+        // Tu URL de Google Apps Script:
         const URL_API = "https://script.google.com/macros/s/AKfycbyiqN3cH27fbCs2AWWByBgzx0MhIlPfiOtOOC9qBsFs-nIpQXhP4wN6Y0pXpqL4LuOl/exec";
         
         // NÚMERO DE WHATSAPP DEL BOTÓN Y FORMULARIO
         const TELEFONO_SOPORTE = "584129020243"; 
 
-        // --- LÓGICA DE BÚSQUEDA (CONECTADA A GOOGLE SHEETS) ---
+        // --- LÓGICA DE BÚSQUEDA ---
         function buscarCliente() {
             const input = document.getElementById('searchInput').value.trim();
             const container = document.getElementById('resultContainer');
@@ -364,7 +452,7 @@
             `;
         }
 
-        // --- LÓGICA DE FORMULARIO (GUARDA EN SHEET Y ENVÍA WHATSAPP) ---
+        // --- LÓGICA DE FORMULARIO ---
         function toggleDate() {
             const tipo = document.getElementById('tipoSolicitud').value;
             const dateGroup = document.getElementById('dateGroup');
@@ -399,15 +487,12 @@
                 body: JSON.stringify(datos)
             })
             .then(() => {
-                // Generar enlace WhatsApp
                 let textoWS = `Hola Soportecrj, soy *${datos.nombre}*.%0A%0ASolicito: *${datos.tipo}*%0AContacto: ${datos.contacto}`;
                 if (datos.tipo !== 'Actualización' && datos.fecha) textoWS += `%0AFecha sugerida: ${datos.fecha}`;
                 textoWS += `%0ADetalles: ${datos.mensaje}`;
                 
-                // Abrir WhatsApp
                 window.open(`https://wa.me/${TELEFONO_SOPORTE}?text=${textoWS}`, '_blank');
                 
-                // Restaurar botón y limpiar formulario
                 btnSubmit.textContent = textoOriginal;
                 btnSubmit.disabled = false;
                 document.getElementById('supportForm').reset();
