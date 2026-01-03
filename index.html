@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SoporteCRJ | Centro de Ayuda D3XD</title>
     <style>
-        /* --- PALETA DE COLORES CORPORATIVA (Extraída del Logo) --- */
+        /* --- PALETA DE COLORES CORPORATIVA (Basada en Logo) --- */
         :root {
-            --primary-blue: #142850;   /* Azul Oscuro del Logo */
+            --primary-blue: #1B3B6F;   /* Azul Oscuro del Logo */
             --secondary-blue: #27496d; /* Azul Medio */
-            --accent-orange: #e65100;  /* Naranja de la "R" */
-            --bg-color: #f0f2f5;       /* Fondo gris suave */
+            --accent-orange: #E65100;  /* Naranja de la "R" */
+            --bg-color: #f4f7f6;       /* Fondo suave */
             --white: #ffffff;
             --text-dark: #333;
             --success: #28a745;
@@ -29,34 +29,38 @@
             line-height: 1.6;
         }
 
-        /* --- HEADER (Ahora Blanco para resaltar el Logo) --- */
+        /* --- HEADER --- */
         header {
             background: var(--white);
             padding: 15px 20px;
             text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             border-bottom: 4px solid var(--primary-blue);
             position: relative;
         }
 
         /* Logo Imagen */
         .logo-img {
-            max-width: 250px; /* Tamaño del logo */
+            max-width: 220px;
             height: auto;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         header p {
             color: var(--secondary-blue);
             font-weight: 500;
-            margin: 5px 0 15px;
+            margin: 0 0 15px;
+            font-size: 0.95rem;
         }
 
         /* Botón HOME */
         .home-link {
             position: absolute;
-            top: 20px;
-            left: 20px;
+            top: 25px;
+            left: 25px;
             color: var(--primary-blue);
             text-decoration: none;
             font-weight: bold;
@@ -64,27 +68,31 @@
             align-items: center;
             gap: 5px;
             font-size: 0.9rem;
+            border: 1px solid #eee;
+            padding: 5px 10px;
+            border-radius: 20px;
+            transition: all 0.3s;
         }
-        .home-link:hover { color: var(--accent-orange); }
+        .home-link:hover { background: var(--bg-color); color: var(--accent-orange); }
 
         /* --- BOTONES DEL HERO --- */
         .hero-buttons {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin-top: 15px;
+            gap: 10px;
+            margin-top: 10px;
             flex-wrap: wrap;
         }
 
         .btn-hero {
-            padding: 10px 25px;
+            padding: 10px 20px;
             border-radius: 50px;
             text-decoration: none;
             font-weight: bold;
             transition: all 0.3s;
             text-align: center;
-            font-size: 0.95rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            font-size: 0.9rem;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
         }
 
         .btn-consultar {
@@ -102,58 +110,63 @@
         .btn-contrato {
             background-color: var(--white);
             color: var(--primary-blue);
-            border: 2px solid var(--primary-blue);
+            border: 1px solid var(--primary-blue);
         }
         .btn-contrato:hover { background-color: #f0f8ff; }
 
-        /* --- LAYOUT PRINCIPAL (3 COLUMNAS: PUBLICIDAD - CONTENIDO - PUBLICIDAD) --- */
+        /* --- LAYOUT PRINCIPAL (3 COLUMNAS) --- */
         .main-layout {
             display: flex;
             justify-content: center;
             gap: 20px;
-            max-width: 1400px; /* Ancho máximo para pantallas grandes */
+            max-width: 1300px;
             margin: 30px auto;
-            padding: 0 20px;
+            padding: 0 15px;
             align-items: flex-start;
         }
 
-        /* Contenedor Central (El sistema) */
+        /* Columna Central */
         .center-content {
-            flex: 2; /* Toma más espacio */
+            flex: 2;
             max-width: 800px;
             display: grid;
             gap: 30px;
+            width: 100%;
         }
 
         /* Barras Laterales (Publicidad) */
         .sidebar {
-            flex: 1; /* Toma menos espacio */
+            flex: 1;
             max-width: 250px;
             display: flex;
             flex-direction: column;
             gap: 20px;
             position: sticky;
-            top: 20px; /* Se queda fijo al bajar */
+            top: 20px;
         }
 
-        /* Estilos de los Banners de Publicidad */
+        /* Banners de Publicidad */
         .ad-banner {
-            background: linear-gradient(135deg, var(--secondary-blue), var(--primary-blue));
-            color: white;
-            padding: 30px 15px;
+            background: white;
+            padding: 20px 15px;
             border-radius: 10px;
             text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-top: 4px solid var(--accent-orange);
             transition: transform 0.3s;
         }
-        .ad-banner:hover { transform: scale(1.02); }
-        .ad-banner h3 { margin-top: 0; color: var(--accent-orange); }
-        .ad-banner p { font-size: 0.9rem; opacity: 0.9; }
+        .ad-banner:hover { transform: translateY(-5px); }
+        .ad-banner h3 { margin-top: 0; color: var(--primary-blue); font-size: 1.1rem; }
+        .ad-banner p { font-size: 0.85rem; color: #555; }
+        
+        /* Imagen dentro de la publicidad */
+        .ad-img { width: 80%; height: auto; margin: 10px auto; display: block; }
+
         .ad-btn {
             display: inline-block;
-            margin-top: 15px;
-            background: var(--white);
-            color: var(--primary-blue);
+            margin-top: 10px;
+            background: var(--primary-blue);
+            color: white;
             padding: 8px 15px;
             border-radius: 20px;
             text-decoration: none;
@@ -161,84 +174,56 @@
             font-size: 0.8rem;
         }
 
-        /* --- TARJETAS DEL SISTEMA --- */
+        /* --- TARJETAS --- */
         .card {
             background: var(--white);
             padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            border-top: 5px solid var(--accent-orange); /* Toque Naranja */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--primary-blue);
             scroll-margin-top: 20px;
         }
 
-        h2 { color: var(--primary-blue); text-align: center; margin-bottom: 10px; }
-        .subtitle { text-align: center; color: #666; font-size: 0.9rem; margin-bottom: 25px; }
+        h2 { color: var(--primary-blue); text-align: center; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #777; font-size: 0.9rem; margin-bottom: 25px; }
 
-        /* INPUTS */
+        /* FORMULARIOS */
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 5px; font-weight: 600; color: #444; }
         
         input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-            box-sizing: border-box;
-            background: #f9f9f9;
+            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;
+            font-size: 1rem; box-sizing: border-box; background: #fafafa;
         }
         input:focus, select:focus, textarea:focus {
-            border-color: var(--accent-orange);
-            outline: none;
-            background: #fff;
+            border-color: var(--accent-orange); outline: none; background: #fff;
         }
 
         /* BUSCADOR */
         .search-box { display: flex; gap: 10px; }
         
         .btn-action {
-            background-color: var(--primary-blue);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            transition: background 0.3s;
+            background-color: var(--primary-blue); color: white; border: none;
+            padding: 12px; border-radius: 8px; font-size: 1rem; font-weight: bold;
+            cursor: pointer; width: 100%; transition: background 0.3s;
         }
         .btn-action:hover { background-color: var(--accent-orange); }
         .btn-action:disabled { background-color: #ccc; cursor: not-allowed; }
-        
         .btn-search { width: auto; min-width: 120px; }
 
         /* RESULTADOS */
         #resultContainer { margin-top: 20px; display: none; }
-        
-        .status-badge {
-            padding: 5px 12px;
-            border-radius: 20px;
-            color: white;
-            font-weight: bold;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-        }
-
-        .detail-row {
-            display: flex; justify-content: space-between;
-            border-bottom: 1px solid #eee; padding: 10px 0;
-        }
-
+        .status-badge { padding: 5px 12px; border-radius: 20px; color: white; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; }
+        .detail-row { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 10px 0; }
         .bg-success { background: var(--success); }
         .bg-danger { background: var(--danger); }
         .bg-warning { background: var(--warning); color: #333; }
 
-        footer { text-align: center; padding: 40px 20px; color: #888; font-size: 0.9rem; background: #e9ecef; margin-top: 40px; }
+        footer { text-align: center; padding: 30px; color: #888; font-size: 0.85rem; margin-top: 40px; border-top: 1px solid #ddd; }
 
         /* WHATSAPP FLOTANTE */
         .float-whatsapp {
-            position: fixed; width: 60px; height: 60px; bottom: 30px; right: 30px;
+            position: fixed; width: 60px; height: 60px; bottom: 25px; right: 25px;
             background-color: #25d366; color: #FFF; border-radius: 50px;
             text-align: center; font-size: 30px; box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
             z-index: 100; display: flex; align-items: center; justify-content: center;
@@ -246,19 +231,16 @@
         }
         .float-whatsapp:hover { transform: scale(1.1); background-color: #128C7E; }
 
-        /* --- MEDIA QUERIES (RESPONSIVO) --- */
-        /* Ocultar publicidad en tablets y celulares */
+        /* RESPONSIVO */
         @media (max-width: 1000px) {
-            .sidebar { display: none; }
+            .sidebar { display: none; } /* Ocultar publicidad en móviles */
             .main-layout { display: block; }
-            .center-content { max-width: 100%; }
         }
-
         @media (max-width: 600px) {
             .search-box { flex-direction: column; }
             .btn-search { width: 100%; }
-            .home-link { display: none; }
-            .logo-img { max-width: 200px; }
+            .home-link { top: 10px; left: 10px; font-size: 0.8rem; padding: 4px 8px; }
+            .logo-img { max-width: 180px; }
         }
     </style>
 </head>
@@ -267,7 +249,7 @@
     <header>
         <a href="index.html" class="home-link">🏠 Inicio</a>
         
-        <img src="logo.png" alt="SoporteCRJ Logo" class="logo-img">
+        <img src="logos/logocrj.png" alt="SoporteCRJ Logo" class="logo-img">
         
         <p>Especialistas en Sistemas Administrativos D3XD</p>
         
@@ -282,14 +264,15 @@
 
         <aside class="sidebar">
             <div class="ad-banner">
-                <h3>🚀 D3XD 2026</h3>
-                <p>¡Actualiza a la última versión y evita multas!</p>
-                <a href="#seccion-soporte" class="ad-btn">Solicitar Info</a>
+                <img src="logos/d3xd.png" alt="D3XD Sistema" class="ad-img">
+                <h3>Licencias D3XD</h3>
+                <p>Renueva tu sistema a tiempo y evita interrupciones.</p>
+                <a href="#seccion-soporte" class="ad-btn">Renovar Ahora</a>
             </div>
-            <div class="ad-banner" style="background: linear-gradient(135deg, #e65100, #ff8f00);">
-                <h3>Impresoras Fiscales</h3>
-                <p>Mantenimiento preventivo y cambio de memoria.</p>
-                <a href="#seccion-soporte" class="ad-btn">Agendar</a>
+            <div class="ad-banner">
+                <h3>Equipos Fiscales</h3>
+                <p>Mantenimiento y venta de impresoras homologadas.</p>
+                <a href="#seccion-soporte" class="ad-btn">Consultar</a>
             </div>
         </aside>
 
@@ -347,15 +330,15 @@
         </main>
 
         <aside class="sidebar">
-            <div class="ad-banner" style="background: white; border: 2px solid var(--primary-blue); color: #333;">
-                <h3 style="color:var(--primary-blue)">Soporte Remoto</h3>
-                <p>Atención inmediata vía AnyDesk o TeamViewer.</p>
-                <a href="#seccion-soporte" class="ad-btn" style="background:var(--primary-blue); color:white;">Pedir Ayuda</a>
+            <div class="ad-banner" style="background: linear-gradient(135deg, var(--primary-blue), #001f4d); color: white;">
+                <h3 style="color:var(--accent-orange)">Soporte Remoto</h3>
+                <p style="color: #ddd;">Atención inmediata vía AnyDesk o TeamViewer.</p>
+                <a href="#seccion-soporte" class="ad-btn" style="background: white; color: var(--primary-blue);">Pedir Ayuda</a>
             </div>
             <div class="ad-banner">
-                <h3>Tu Espacio Aquí</h3>
-                <p>¿Quieres promocionar tu negocio en nuestra red?</p>
-                <span style="font-size:0.8rem; display:block; margin-top:10px;">Contáctanos</span>
+                <h3>Contratos</h3>
+                <p>Genera tu contrato de servicio automáticamente.</p>
+                <a href="contrato.html" class="ad-btn" style="background: var(--accent-orange);">Ir a Contratos</a>
             </div>
         </aside>
 
@@ -370,14 +353,12 @@
     </a>
 
     <script>
-        // --- CONFIGURACIÓN ---
-        // Tu URL de Google Apps Script:
+        // URL DE GOOGLE APPS SCRIPT
         const URL_API = "https://script.google.com/macros/s/AKfycbyiqN3cH27fbCs2AWWByBgzx0MhIlPfiOtOOC9qBsFs-nIpQXhP4wN6Y0pXpqL4LuOl/exec";
         
-        // NÚMERO DE WHATSAPP DEL BOTÓN Y FORMULARIO
+        // WHATSAPP
         const TELEFONO_SOPORTE = "584129020243"; 
 
-        // --- LÓGICA DE BÚSQUEDA ---
         function buscarCliente() {
             const input = document.getElementById('searchInput').value.trim();
             const container = document.getElementById('resultContainer');
@@ -385,12 +366,10 @@
 
             if(input === "") { alert("Por favor escribe un RIF o Nombre."); return; }
 
-            // Mostrar estado de carga
             btnBuscar.textContent = "Buscando...";
             btnBuscar.disabled = true;
             container.style.display = "none";
 
-            // Petición a la API
             fetch(`${URL_API}?action=buscar&q=${input}`)
             .then(response => response.json())
             .then(data => {
@@ -414,8 +393,6 @@
 
         function mostrarResultado(cliente) {
             const container = document.getElementById('resultContainer');
-            
-            // Calculamos días restantes para vencer
             const hoy = new Date();
             const fechaVence = new Date(cliente.vencimiento);
             const diffTime = fechaVence - hoy;
@@ -452,7 +429,6 @@
             `;
         }
 
-        // --- LÓGICA DE FORMULARIO ---
         function toggleDate() {
             const tipo = document.getElementById('tipoSolicitud').value;
             const dateGroup = document.getElementById('dateGroup');
@@ -465,7 +441,6 @@
             const btnSubmit = document.querySelector('.btn-action[type="submit"]');
             const textoOriginal = btnSubmit.textContent;
             
-            // Recopilar datos
             const datos = {
                 tipo: document.getElementById('tipoSolicitud').value,
                 nombre: document.getElementById('nombre').value,
@@ -477,13 +452,10 @@
             btnSubmit.textContent = "Procesando...";
             btnSubmit.disabled = true;
 
-            // Enviar a Google Sheets
             fetch(URL_API, {
                 method: 'POST',
                 mode: 'no-cors', 
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(datos)
             })
             .then(() => {
