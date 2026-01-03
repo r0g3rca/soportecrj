@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Presupuestos | SoporteCRJ</title>
+    <style>
+        :root { --primary: #1B3B6F; --accent: #E65100; --bg: #f4f7f6; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
+        
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        
+        /* Cabecera del Documento */
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); padding-bottom: 20px; margin-bottom: 30px; }
+        .logo { height: 60px; }
+        .company-info { text-align: right; font-size: 0.9rem; }
+        
+        /* Formulario */
+        .input-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        
+        /* Tabla de Items */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background: var(--primary); color: white; }
+        .price-col { width: 150px; text-align: right; }
+        
+        /* Totales */
+        .totals { margin-top: 20px; text-align: right; font-size: 1.2rem; }
+        .grand-total { font-weight: bold; color: var(--accent); font-size: 1.5rem; }
+
+        /* Botones (No se imprimen) */
+        .actions { margin-top: 30px; text-align: center; }
+        button { padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 1rem; margin: 5px; }
+        .btn-add { background: #17a2b8; color: white; }
+        .btn-print { background: var(--primary); color: white; }
+        .btn-back { background: #6c757d; color: white; text-decoration: none; padding: 12px 25px; border-radius: 5px; display: inline-block; }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; margin: 0; width: 100%; max-width: 100%; }
+            .actions, .btn-remove { display: none; }
+            input { border: none; padding: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <img src="logos/logocrj.png" alt="SoporteCRJ" class="logo">
+            <div class="company-info">
+                <strong>SOPORTE CRJ, C.A.</strong><br>
+                RIF: J-40713364-0<br>
+                Caracas, Venezuela<br>
+                Tel: 0412-9020243
+            </div>
+        </div>
+
+        <h2 style="text-align:center; color:var(--primary);">PRESUPUESTO</h2>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+            <div class="input-group">
+                <label>Cliente / Razón Social:</label>
+                <input type="text" placeholder="Nombre del Cliente">
+            </div>
+            <div class="input-group">
+                <label>Fecha:</label>
+                <input type="date" id="fechaHoy">
+            </div>
+        </div>
+        <div class="input-group">
+            <label>RIF / CI:</label>
+            <input type="text" placeholder="J-12345678-9">
+        </div>
+
+        <table id="tablaItems">
+            <thead>
+                <tr>
+                    <th>Descripción del Servicio / Producto</th>
+                    <th class="price-col">Precio ($)</th>
+                    <th style="width:50px;" class="actions"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" value="Licencia Anual D3XD (Renovación)"></td>
+                    <td><input type="number" class="precio" value="0" oninput="calcularTotal()"></td>
+                    <td class="actions"><button class="btn-remove" onclick="borrarFila(this)" style="background:red; color:white; padding:5px 10px;">X</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="actions" style="text-align: left;">
+            <button class="btn-add" onclick="agregarFila()">+ Agregar Item</button>
+        </div>
+
+        <div class="totals">
+            Total Estimado: <span id="totalMonto" class="grand-total">$0.00</span>
+        </div>
+
+        <p style="font-size:0.8rem; color:#666; margin-top:40px; text-align:center;">
+            Este presupuesto tiene una validez de 5 días. Precios sujetos a cambio.<br>
+            Forma de Pago: Transferencia / Pago Móvil / Divisas.
+        </p>
+
+        <div class="actions">
+            <a href="index.html" class="btn-back">🏠 Inicio</a>
+            <button class="btn-print" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+        </div>
+    </div>
+
+    <a href="https://wa.me/584129020243?text=Hola,%20necesito%20aprobar%20un%20presupuesto" style="position:fixed; bottom:20px; right:20px; width:60px; height:60px;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:100%; drop-shadow: 2px 4px 6px rgba(0,0,0,0.3);">
+    </a>
+
+    <script>
+        document.getElementById('fechaHoy').valueAsDate = new Date();
+
+        function calcularTotal() {
+            let total = 0;
+            document.querySelectorAll('.precio').forEach(input => {
+                total += parseFloat(input.value) || 0;
+            });
+            document.getElementById('totalMonto').innerText = "$" + total.toFixed(2);
+        }
+
+        function agregarFila() {
+            const table = document.getElementById('tablaItems').getElementsByTagName('tbody')[0];
+            const newRow = table.insertRow();
+            newRow.innerHTML = `
+                <td><input type="text" placeholder="Descripción..."></td>
+                <td><input type="number" class="precio" value="0" oninput="calcularTotal()"></td>
+                <td class="actions"><button class="btn-remove" onclick="borrarFila(this)" style="background:red; color:white; padding:5px 10px;">X</button></td>
+            `;
+        }
+
+        function borrarFila(btn) {
+            const row = btn.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+            calcularTotal();
+        }
+    </script>
+</body>
+</html>
