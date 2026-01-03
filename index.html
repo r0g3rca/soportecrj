@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SoporteCRJ | Centro de Ayuda D3XD</title>
     <style>
-        /* --- PALETA DE COLORES CORPORATIVA (Basada en Logo) --- */
+        /* --- PALETA DE COLORES CORPORATIVA --- */
         :root {
-            --primary-blue: #1B3B6F;   /* Azul Oscuro del Logo */
+            --primary-blue: #1B3B6F;   /* Azul Oscuro */
             --secondary-blue: #27496d; /* Azul Medio */
-            --accent-orange: #E65100;  /* Naranja de la "R" */
-            --bg-color: #f4f7f6;       /* Fondo suave */
+            --accent-orange: #E65100;  /* Naranja */
+            --bg-color: #f4f7f6;
             --white: #ffffff;
             --text-dark: #333;
             --success: #28a745;
@@ -27,72 +27,71 @@
             background-color: var(--bg-color);
             color: var(--text-dark);
             line-height: 1.6;
+            padding-top: 80px; /* Espacio para que el header fijo no tape el contenido */
         }
 
-        /* --- HEADER --- */
+        /* --- HEADER COMPACTO Y MODERNO --- */
         header {
             background: var(--white);
-            padding: 15px 20px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            border-bottom: 4px solid var(--primary-blue);
-            position: relative;
+            padding: 10px 30px; /* Menos relleno vertical */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-bottom: 3px solid var(--primary-blue);
+            
+            /* Lógica Flex para poner botones al lado del logo */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            
+            /* Header Fijo (Sticky) */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            box-sizing: border-box;
+            z-index: 1000;
         }
 
-        /* Logo Imagen */
-        .logo-img {
-            max-width: 220px;
-            height: auto;
-            margin-bottom: 5px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        header p {
-            color: var(--secondary-blue);
-            font-weight: 500;
-            margin: 0 0 15px;
-            font-size: 0.95rem;
-        }
-
-        /* Botón HOME */
-        .home-link {
-            position: absolute;
-            top: 25px;
-            left: 25px;
-            color: var(--primary-blue);
-            text-decoration: none;
-            font-weight: bold;
+        /* Área Izquierda: Home + Logo */
+        .header-left {
             display: flex;
             align-items: center;
-            gap: 5px;
-            font-size: 0.9rem;
-            border: 1px solid #eee;
-            padding: 5px 10px;
-            border-radius: 20px;
-            transition: all 0.3s;
+            gap: 15px;
         }
-        .home-link:hover { background: var(--bg-color); color: var(--accent-orange); }
 
-        /* --- BOTONES DEL HERO --- */
+        /* Logo más pequeño y controlado */
+        .logo-img {
+            height: 50px; /* Altura fija para que sea compacto */
+            width: auto;
+            display: block;
+        }
+
+        /* Botón de Inicio pequeño */
+        .home-icon {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 5px;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+        .home-icon:hover { background-color: #f0f2f5; }
+
+        /* Área Derecha: Botones de Acción */
         .hero-buttons {
             display: flex;
-            justify-content: center;
             gap: 10px;
-            margin-top: 10px;
-            flex-wrap: wrap;
+            margin: 0; /* Sin márgenes extra */
         }
 
         .btn-hero {
-            padding: 10px 20px;
+            padding: 8px 18px; /* Botones más compactos */
             border-radius: 50px;
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 600;
             transition: all 0.3s;
             text-align: center;
-            font-size: 0.9rem;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            font-size: 0.85rem;
+            white-space: nowrap; /* Evita que el texto se parta */
         }
 
         .btn-consultar {
@@ -114,13 +113,14 @@
         }
         .btn-contrato:hover { background-color: #f0f8ff; }
 
+
         /* --- LAYOUT PRINCIPAL (3 COLUMNAS) --- */
         .main-layout {
             display: flex;
             justify-content: center;
             gap: 20px;
             max-width: 1300px;
-            margin: 30px auto;
+            margin: 20px auto;
             padding: 0 15px;
             align-items: flex-start;
         }
@@ -130,7 +130,7 @@
             flex: 2;
             max-width: 800px;
             display: grid;
-            gap: 30px;
+            gap: 25px;
             width: 100%;
         }
 
@@ -142,7 +142,7 @@
             flex-direction: column;
             gap: 20px;
             position: sticky;
-            top: 20px;
+            top: 100px; /* Ajustado por el header fijo */
         }
 
         /* Banners de Publicidad */
@@ -158,20 +158,12 @@
         .ad-banner:hover { transform: translateY(-5px); }
         .ad-banner h3 { margin-top: 0; color: var(--primary-blue); font-size: 1.1rem; }
         .ad-banner p { font-size: 0.85rem; color: #555; }
-        
-        /* Imagen dentro de la publicidad */
         .ad-img { width: 80%; height: auto; margin: 10px auto; display: block; }
 
         .ad-btn {
-            display: inline-block;
-            margin-top: 10px;
-            background: var(--primary-blue);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.8rem;
+            display: inline-block; margin-top: 10px; background: var(--primary-blue);
+            color: white; padding: 8px 15px; border-radius: 20px;
+            text-decoration: none; font-weight: bold; font-size: 0.8rem;
         }
 
         /* --- TARJETAS --- */
@@ -181,7 +173,7 @@
             border-radius: 12px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             border-left: 5px solid var(--primary-blue);
-            scroll-margin-top: 20px;
+            scroll-margin-top: 100px; /* Para que el header no tape el título al bajar */
         }
 
         h2 { color: var(--primary-blue); text-align: center; margin-bottom: 5px; }
@@ -199,9 +191,8 @@
             border-color: var(--accent-orange); outline: none; background: #fff;
         }
 
-        /* BUSCADOR */
+        /* BUSCADOR Y BOTONES GRANDES */
         .search-box { display: flex; gap: 10px; }
-        
         .btn-action {
             background-color: var(--primary-blue); color: white; border: none;
             padding: 12px; border-radius: 8px; font-size: 1rem; font-weight: bold;
@@ -226,37 +217,42 @@
             position: fixed; width: 60px; height: 60px; bottom: 25px; right: 25px;
             background-color: #25d366; color: #FFF; border-radius: 50px;
             text-align: center; font-size: 30px; box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
-            z-index: 100; display: flex; align-items: center; justify-content: center;
+            z-index: 2000; display: flex; align-items: center; justify-content: center;
             text-decoration: none; transition: transform 0.3s;
         }
         .float-whatsapp:hover { transform: scale(1.1); background-color: #128C7E; }
 
-        /* RESPONSIVO */
+        /* RESPONSIVO (Celulares) */
         @media (max-width: 1000px) {
-            .sidebar { display: none; } /* Ocultar publicidad en móviles */
+            .sidebar { display: none; }
             .main-layout { display: block; }
         }
-        @media (max-width: 600px) {
+
+        @media (max-width: 768px) {
+            /* En móvil, el header vuelve a ser columna para que quepa todo */
+            header { flex-direction: column; padding: 15px; position: relative; }
+            body { padding-top: 0; } /* Quitar padding porque header ya no es fijo en móvil para ahorrar pantalla */
+            .header-left { margin-bottom: 15px; }
+            .hero-buttons { width: 100%; flex-direction: column; }
+            .btn-hero { width: 100%; box-sizing: border-box; }
+            .logo-img { height: 60px; } /* Un poco más grande en móvil */
             .search-box { flex-direction: column; }
             .btn-search { width: 100%; }
-            .home-link { top: 10px; left: 10px; font-size: 0.8rem; padding: 4px 8px; }
-            .logo-img { max-width: 180px; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <a href="index.html" class="home-link">🏠 Inicio</a>
-        
-        <img src="logos/logocrj.png" alt="SoporteCRJ Logo" class="logo-img">
-        
-        <p>Especialistas en Sistemas Administrativos D3XD</p>
+        <div class="header-left">
+            <a href="index.html" class="home-icon" title="Recargar Inicio">🏠</a>
+            <img src="logos/logocrj.png" alt="SoporteCRJ Logo" class="logo-img">
+        </div>
         
         <div class="hero-buttons">
-            <a href="#seccion-consulta" class="btn-hero btn-consultar">🔍 Consultar Licencia</a>
-            <a href="#seccion-soporte" class="btn-hero btn-agendar">📅 Agendar Soporte</a>
-            <a href="contrato.html" class="btn-hero btn-contrato">📝 Contrato Servicio</a>
+            <a href="#seccion-consulta" class="btn-hero btn-consultar">🔍 Consultar</a>
+            <a href="#seccion-soporte" class="btn-hero btn-agendar">📅 Agendar</a>
+            <a href="contrato.html" class="btn-hero btn-contrato">📝 Contrato</a>
         </div>
     </header>
 
