@@ -5,16 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generador de Presupuestos | SoporteCRJ</title>
     <style>
-        :root { --primary: #1B3B6F; --accent: #E65100; --bg: #f4f7f6; }
+        :root { --primary: #1B3B6F; --accent: #E65100; --bg: #f4f7f6; --success: #28a745; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
         
-        .container { max-width: 900px; margin: 0 auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); position: relative; }
         
         /* HEADER */
         .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); padding-bottom: 20px; margin-bottom: 30px; }
-        .logo { height: 80px; width: auto; } /* Logo más grande */
+        .logo { height: 80px; width: auto; }
         .company-info { text-align: right; font-size: 0.9rem; }
         
+        /* TASA DEL DIA (NUEVO) */
+        .rate-badge {
+            background: #e3f2fd;
+            color: var(--primary);
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            border: 1px solid #b3e5fc;
+            display: inline-block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
         /* FORMULARIO */
         .grid-2 { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 15px; }
         .input-group { margin-bottom: 15px; }
@@ -29,16 +42,17 @@
         .qty-col { width: 80px; text-align: center; }
         
         /* TOTALES */
-        .totals { margin-top: 20px; text-align: right; font-size: 1.2rem; border-top: 2px solid #eee; padding-top: 10px; }
-        .grand-total { font-weight: bold; color: var(--accent); font-size: 1.6rem; }
+        .totals { margin-top: 20px; text-align: right; font-size: 1.1rem; border-top: 2px solid #eee; padding-top: 10px; }
+        .grand-total { font-weight: bold; color: var(--accent); font-size: 1.4rem; }
+        .grand-total-bs { font-weight: bold; color: #333; font-size: 1.2rem; display: block; margin-top: 5px;}
 
-        /* SECCIÓN DE CURSOS (Info Adicional) */
+        /* SECCIÓN DE CURSOS */
         .course-info { margin-top: 40px; padding-top: 20px; border-top: 2px dashed #ccc; page-break-inside: avoid; }
         .course-info h3 { color: var(--primary); margin-bottom: 10px; }
         .module-list { font-size: 0.85rem; columns: 2; color: #555; }
         .module-list ul { margin: 0; padding-left: 20px; }
 
-        /* BOTONES (No se imprimen) */
+        /* BOTONES */
         .actions { margin-top: 30px; text-align: center; }
         button { padding: 12px 25px; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; font-size: 1rem; margin: 5px; transition: 0.3s; }
         .btn-add { background: #17a2b8; color: white; }
@@ -46,7 +60,7 @@
         .btn-back { background: #6c757d; color: white; text-decoration: none; padding: 12px 25px; border-radius: 50px; display: inline-block; font-weight: bold; }
         .btn-remove { background: #dc3545; color: white; padding: 5px 12px; border-radius: 5px; font-size: 0.8rem; }
 
-        /* WHATSAPP FLOTANTE */
+        /* WHATSAPP */
         .float-whatsapp {
             position: fixed; width: 60px; height: 60px; bottom: 25px; right: 25px;
             z-index: 2000; transition: transform 0.3s;
@@ -59,8 +73,8 @@
             .container { box-shadow: none; margin: 0; width: 100%; max-width: 100%; }
             .actions, .btn-remove, .btn-back, .float-whatsapp { display: none !important; }
             input, select { border: none; padding: 0; appearance: none; -moz-appearance: none; -webkit-appearance: none; font-family: inherit; font-size: inherit; color: black; }
-            /* Truco para que el select impreso muestre el texto y no la flecha */
             select { background-image: none; background: transparent; width: auto; }
+            .rate-badge { border: 1px solid #ccc; color: black; }
         }
     </style>
 </head>
@@ -74,6 +88,13 @@
                 RIF: J-40713364-0<br>
                 Caracas, Venezuela<br>
                 Tel: 0412-9020243
+                
+                <div style="margin-top: 10px;">
+                    <div id="loadingTasa" style="font-size:0.8rem; color:#666;">Cargando Tasa...</div>
+                    <div id="infoTasa" class="rate-badge" style="display:none;">
+                        Tasa <span id="nombreFuente">BCV</span>: Bs. <span id="valorTasa">0.00</span>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -99,7 +120,7 @@
                 <tr>
                     <th>Descripción del Servicio / Producto</th>
                     <th class="qty-col">Cant.</th>
-                    <th class="price-col">Precio Unit. ($)</th>
+                    <th class="price-col">Precio ($)</th>
                     <th class="price-col">Subtotal ($)</th>
                     <th style="width:40px;" class="actions"></th>
                 </tr>
@@ -114,7 +135,7 @@
                                 <option value="100">Lic. Especializada y Renovación</option>
                                 <option value="60">Lic. POS Caja y Renovación</option>
                             </optgroup>
-                            <optgroup label="Mano de Obra (Servicio Técnico)">
+                            <optgroup label="Mano de Obra">
                                 <option value="150">Mano de Obra (1 a 3 Equipos)</option>
                                 <option value="300">Mano de Obra (3 a 10 Equipos)</option>
                             </optgroup>
@@ -124,10 +145,10 @@
                                 <option value="250">Curso Avanzado (Módulos 1 al 11)</option>
                             </optgroup>
                             <optgroup label="Otros">
-                                <option value="0">Servicio Personalizado (Escribir Manualmente)</option>
+                                <option value="0">Servicio Personalizado</option>
                             </optgroup>
                         </select>
-                        <input type="text" class="custom-desc" placeholder="Descripción adicional (Opcional)" style="margin-top:5px; font-size:0.9rem; color:#666; display:none;">
+                        <input type="text" class="custom-desc" placeholder="Descripción adicional" style="margin-top:5px; font-size:0.9rem; color:#666; display:none;">
                     </td>
                     <td><input type="number" class="cantidad" value="1" min="1" oninput="calcularTotal()"></td>
                     <td><input type="number" class="precio" value="0" oninput="calcularTotal()"></td>
@@ -142,66 +163,117 @@
         </div>
 
         <div class="totals">
-            Total a Pagar: <span id="totalMonto" class="grand-total">$0.00</span>
+            <div>Total Divisas: <span id="totalMonto" class="grand-total">$0.00</span></div>
+            <div id="filaBs" style="display:none; margin-top:5px; padding-top:5px; border-top:1px dashed #ddd;">
+                Total Bolívares: <span id="totalMontoBs" class="grand-total-bs">Bs. 0.00</span>
+                <div style="font-size:0.8rem; color:#666;">Calculado a tasa del día</div>
+            </div>
         </div>
 
         <p style="font-size:0.8rem; color:#666; margin-top:30px; text-align:center; border-top:1px solid #ddd; padding-top:10px;">
-            Este presupuesto tiene una validez de 5 días. Precios sujetos a cambio sin previo aviso.<br>
+            Validez: 5 días. Precios sujetos a cambio.<br>
             Forma de Pago: Transferencia / Pago Móvil / Divisas Efectivo.
         </p>
 
         <div class="course-info" id="infoCursos" style="display:none;">
-            <h3>📚 Contenido Programático de Cursos D3XD</h3>
-            <p style="font-size:0.9rem; margin-bottom:10px;">A continuación se detallan los módulos incluidos según el nivel contratado:</p>
+            <h3>📚 Contenido Programático</h3>
             <div class="module-list">
                 <ul>
-                    <li><strong>Módulo 1:</strong> Introducción y Configuración.</li>
-                    <li><strong>Módulo 2:</strong> Ventas, Cotizaciones y Pedidos.</li>
-                    <li><strong>Módulo 3:</strong> Inventarios de Productos.</li>
-                    <li><strong>Módulo 4:</strong> Cuentas por Cobrar y Pagar.</li>
-                    <li><strong>Módulo 5:</strong> Control de Caja y Monedas. <span style="color:var(--accent); font-weight:bold;">(Fin Básico)</span></li>
-                    <li><strong>Módulo 6:</strong> Traslados y Ajustes.</li>
-                    <li><strong>Módulo 7:</strong> Sucursales y Remoto. <span style="color:var(--accent); font-weight:bold;">(Fin Intermedio)</span></li>
-                    <li><strong>Módulo 8:</strong> Producción y Lotes.</li>
-                    <li><strong>Módulo 9:</strong> Nómina y Empleados.</li>
-                    <li><strong>Módulo 10:</strong> Compras y Proveedores.</li>
-                    <li><strong>Módulo 11:</strong> Precios por Volumen. <span style="color:var(--accent); font-weight:bold;">(Fin Avanzado)</span></li>
+                    <li><strong>Módulo 1-4:</strong> Configuración, Ventas, Inventario, CxC/CxP.</li>
+                    <li><strong>Módulo 5:</strong> Caja y Monedas. <span style="color:var(--accent);">(Fin Básico)</span></li>
+                    <li><strong>Módulo 6-7:</strong> Traslados, Sucursales. <span style="color:var(--accent);">(Fin Intermedio)</span></li>
+                    <li><strong>Módulo 8-11:</strong> Producción, Nómina, Compras, Volumen. <span style="color:var(--accent);">(Fin Avanzado)</span></li>
                 </ul>
             </div>
         </div>
 
         <div class="actions">
-            <a href="index.html" class="btn-back">🏠 Volver al Inicio</a>
-            <button class="btn-print" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+            <a href="index.html" class="btn-back">🏠 Volver</a>
+            <button class="btn-print" onclick="window.print()">🖨️ Imprimir PDF</button>
         </div>
     </div>
 
-    <a href="https://wa.me/584129020243?text=Hola,%20adjunto%20presupuesto%20para%20su%20aprobación" class="float-whatsapp" target="_blank">
+    <a href="https://wa.me/584129020243" class="float-whatsapp" target="_blank">
         <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
     </a>
 
     <script>
-        // Poner fecha de hoy
         document.getElementById('fechaHoy').valueAsDate = new Date();
+        
+        // VARIABLE GLOBAL DE TASA
+        let tasaDeCambio = 0; 
+
+        // ---------------------------------------------------------
+        // 1. FUNCIÓN PARA CONSUMIR LA API (NUEVO)
+        // ---------------------------------------------------------
+        async function obtenerTasa() {
+            // NOTA: Reemplaza esta URL con la URL real de tu API.
+            // Si usas una pública como PyDolarVenezuela, se vería algo así:
+            // const API_URL = 'https://pydolarvenezuela-api.vercel.app/api/v1/dollar?page=bcv';
+            
+            // Aquí simularé que llamamos a TU estructura JSON
+            // Para probarlo sin servidor real, usaré datos simulados (mock).
+            // Cuando tengas tu URL, descomenta la linea de fetch y borra el mock.
+
+            try {
+                // const response = await fetch('TU_URL_DE_LA_API_AQUI');
+                // const data = await response.json();
+
+                // --- INICIO MOCK (Simulación de tu JSON) ---
+                const data = {
+                    "fuente": "BCV (Banco Central)",
+                    "nombre": "Dólar Oficial",
+                    "compra": 54.00,
+                    "venta": 55.00,
+                    "promedio": 60.25, // Ejemplo de tasa futura
+                    "fechaActualizacion": new Date().toISOString()
+                };
+                // --- FIN MOCK ---
+
+                // Asignar valores
+                if(data.promedio > 0) {
+                    tasaDeCambio = data.promedio;
+                    
+                    // Actualizar UI Header
+                    document.getElementById('loadingTasa').style.display = 'none';
+                    document.getElementById('infoTasa').style.display = 'inline-block';
+                    document.getElementById('nombreFuente').innerText = data.fuente;
+                    document.getElementById('valorTasa').innerText = tasaDeCambio.toFixed(2);
+                    
+                    // Mostrar fila de Bs en totales
+                    document.getElementById('filaBs').style.display = 'block';
+                    
+                    // Recalcular montos
+                    calcularTotal();
+                }
+
+            } catch (error) {
+                console.error("Error al obtener tasa:", error);
+                document.getElementById('loadingTasa').innerText = "No se pudo cargar la tasa.";
+            }
+        }
+
+        // Llamar a la API al cargar la página
+        obtenerTasa();
+
+        // ---------------------------------------------------------
+        // 2. LÓGICA DEL PRESUPUESTO (MODIFICADO)
+        // ---------------------------------------------------------
 
         function actualizarPrecio(select) {
             const row = select.closest('tr');
             const precioInput = row.querySelector('.precio');
             const customDesc = row.querySelector('.custom-desc');
-            
-            // Asignar precio según selección
             const precio = select.value;
+            
             precioInput.value = precio;
             
-            // Mostrar input extra si elige "Personalizado" (valor 0)
             if (precio === "0") {
                 customDesc.style.display = 'block';
-                customDesc.placeholder = "Escriba el nombre del servicio...";
-                select.style.display = 'none'; // Ocultar el select para que escriba
+                select.style.display = 'none';
                 customDesc.focus();
             }
 
-            // Mostrar sección de Cursos si se selecciona alguno
             const textoSeleccion = select.options[select.selectedIndex].text;
             const infoCursos = document.getElementById('infoCursos');
             if(textoSeleccion.includes("Curso")) {
@@ -212,7 +284,7 @@
         }
 
         function calcularTotal() {
-            let total = 0;
+            let totalUSD = 0;
             const rows = document.querySelectorAll('#tablaItems tbody tr');
             
             rows.forEach(row => {
@@ -221,18 +293,26 @@
                 const subtotal = cant * precio;
                 
                 row.querySelector('.subtotal').innerText = "$" + subtotal.toFixed(2);
-                total += subtotal;
+                totalUSD += subtotal;
             });
             
-            document.getElementById('totalMonto').innerText = "$" + total.toFixed(2);
+            // Actualizar Total USD
+            document.getElementById('totalMonto').innerText = "$" + totalUSD.toFixed(2);
+
+            // Actualizar Total Bs (Si tenemos tasa)
+            if(tasaDeCambio > 0) {
+                const totalBs = totalUSD * tasaDeCambio;
+                // Formateador de moneda para Bolívares (usa coma como decimal y punto como miles)
+                const formatoBs = new Intl.NumberFormat('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(totalBs);
+                document.getElementById('totalMontoBs').innerText = "Bs. " + formatoBs;
+            }
         }
 
         function agregarFila() {
             const tbody = document.querySelector('#tablaItems tbody');
-            const filaOriginal = tbody.rows[0]; // Copiar la primera fila
+            const filaOriginal = tbody.rows[0];
             const nuevaFila = filaOriginal.cloneNode(true);
             
-            // Limpiar valores de la nueva fila
             nuevaFila.querySelector('select').value = "";
             nuevaFila.querySelector('select').style.display = 'block';
             nuevaFila.querySelector('.custom-desc').style.display = 'none';
@@ -247,7 +327,6 @@
         function borrarFila(btn) {
             const row = btn.closest('tr');
             const tbody = document.querySelector('#tablaItems tbody');
-            
             if (tbody.rows.length > 1) {
                 row.remove();
                 calcularTotal();
