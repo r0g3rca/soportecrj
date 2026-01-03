@@ -5,161 +5,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SoporteCRJ | Centro de Ayuda D3XD</title>
     <style>
-        /* --- PALETA DE COLORES CORPORATIVA --- */
+        /* --- PALETA DE COLORES --- */
         :root {
-            --primary-blue: #1B3B6F;   /* Azul Oscuro */
-            --secondary-blue: #27496d; /* Azul Medio */
-            --accent-orange: #E65100;  /* Naranja */
+            --primary-blue: #1B3B6F;
+            --secondary-blue: #27496d;
+            --accent-orange: #E65100;
             --bg-color: #f4f7f6;
             --white: #ffffff;
             --text-dark: #333;
             --success: #28a745;
-            --danger: #dc3545;
-            --warning: #ffc107;
         }
 
         html { scroll-behavior: smooth; }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-dark);
-            line-height: 1.6;
-            padding-top: 80px; /* Espacio para que el header fijo no tape el contenido */
+            margin: 0; padding: 0; background-color: var(--bg-color);
+            color: var(--text-dark); line-height: 1.6; padding-top: 90px;
         }
 
-        /* --- HEADER COMPACTO Y MODERNO --- */
+        /* --- HEADER --- */
         header {
             background: var(--white);
-            padding: 10px 30px; /* Menos relleno vertical */
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            border-bottom: 3px solid var(--primary-blue);
-            
-            /* Lógica Flex para poner botones al lado del logo */
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            
-            /* Header Fijo (Sticky) */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            box-sizing: border-box;
-            z-index: 1000;
+            padding: 10px 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-bottom: 4px solid var(--primary-blue);
+            display: flex; justify-content: space-between; align-items: center;
+            position: fixed; top: 0; left: 0; width: 100%; box-sizing: border-box; z-index: 1000;
         }
 
-        /* Área Izquierda: Home + Logo */
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        /* Logo más pequeño y controlado */
+        /* LOGO RESPONSIVO */
         .logo-img {
-            height: 50px; /* Altura fija para que sea compacto */
+            height: 75px; /* Más grande en PC */
             width: auto;
             display: block;
+            transition: all 0.3s ease;
         }
 
-        /* Botón de Inicio pequeño */
-        .home-icon {
-            color: var(--primary-blue);
-            text-decoration: none;
-            font-size: 1.2rem;
-            padding: 5px;
-            border-radius: 50%;
-            transition: background 0.3s;
-        }
-        .home-icon:hover { background-color: #f0f2f5; }
-
-        /* Área Derecha: Botones de Acción */
-        .hero-buttons {
-            display: flex;
-            gap: 10px;
-            margin: 0; /* Sin márgenes extra */
-        }
+        /* BOTONES DEL HEADER */
+        .hero-buttons { display: flex; gap: 8px; align-items: center; }
 
         .btn-hero {
-            padding: 8px 18px; /* Botones más compactos */
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            text-align: center;
-            font-size: 0.85rem;
-            white-space: nowrap; /* Evita que el texto se parta */
+            padding: 8px 16px; border-radius: 50px; text-decoration: none;
+            font-weight: 700; transition: all 0.3s; text-align: center;
+            font-size: 0.85rem; white-space: nowrap; border: 1px solid transparent;
         }
 
-        .btn-consultar {
-            background-color: var(--primary-blue);
-            color: var(--white);
-        }
+        .btn-consultar { background-color: var(--primary-blue); color: var(--white); }
         .btn-consultar:hover { background-color: #0f1e3c; transform: translateY(-2px); }
 
-        .btn-agendar {
-            background-color: var(--accent-orange);
-            color: var(--white);
-        }
+        .btn-agendar { background-color: var(--accent-orange); color: var(--white); }
         .btn-agendar:hover { background-color: #cc4600; transform: translateY(-2px); }
         
-        .btn-contrato {
-            background-color: var(--white);
-            color: var(--primary-blue);
-            border: 1px solid var(--primary-blue);
-        }
+        .btn-presupuesto { background-color: #28a745; color: white; } /* Verde Dinero */
+        .btn-presupuesto:hover { background-color: #1e7e34; transform: translateY(-2px); }
+
+        .btn-contrato { background-color: var(--white); color: var(--primary-blue); border-color: var(--primary-blue); }
         .btn-contrato:hover { background-color: #f0f8ff; }
 
-
-        /* --- LAYOUT PRINCIPAL (3 COLUMNAS) --- */
+        /* --- LAYOUT --- */
         .main-layout {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            max-width: 1300px;
-            margin: 20px auto;
-            padding: 0 15px;
-            align-items: flex-start;
+            display: flex; justify-content: center; gap: 20px;
+            max-width: 1300px; margin: 20px auto; padding: 0 15px; align-items: flex-start;
         }
 
-        /* Columna Central */
-        .center-content {
-            flex: 2;
-            max-width: 800px;
-            display: grid;
-            gap: 25px;
-            width: 100%;
-        }
-
-        /* Barras Laterales (Publicidad) */
+        .center-content { flex: 2; max-width: 800px; display: grid; gap: 25px; width: 100%; }
+        
         .sidebar {
-            flex: 1;
-            max-width: 250px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            position: sticky;
-            top: 100px; /* Ajustado por el header fijo */
+            flex: 1; max-width: 250px; display: flex; flex-direction: column; gap: 20px;
+            position: sticky; top: 110px;
         }
 
-        /* Banners de Publicidad */
         .ad-banner {
-            background: white;
-            padding: 20px 15px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            border-top: 4px solid var(--accent-orange);
-            transition: transform 0.3s;
+            background: white; padding: 20px 15px; border-radius: 10px;
+            text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-top: 4px solid var(--accent-orange); transition: transform 0.3s;
         }
         .ad-banner:hover { transform: translateY(-5px); }
-        .ad-banner h3 { margin-top: 0; color: var(--primary-blue); font-size: 1.1rem; }
-        .ad-banner p { font-size: 0.85rem; color: #555; }
-        .ad-img { width: 80%; height: auto; margin: 10px auto; display: block; }
-
+        .ad-img { width: 80%; margin: 10px auto; display: block; }
         .ad-btn {
             display: inline-block; margin-top: 10px; background: var(--primary-blue);
             color: white; padding: 8px 15px; border-radius: 20px;
@@ -168,312 +91,171 @@
 
         /* --- TARJETAS --- */
         .card {
-            background: var(--white);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            border-left: 5px solid var(--primary-blue);
-            scroll-margin-top: 100px; /* Para que el header no tape el título al bajar */
+            background: var(--white); padding: 30px; border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-left: 5px solid var(--primary-blue);
+            scroll-margin-top: 120px;
         }
-
         h2 { color: var(--primary-blue); text-align: center; margin-bottom: 5px; }
         .subtitle { text-align: center; color: #777; font-size: 0.9rem; margin-bottom: 25px; }
 
         /* FORMULARIOS */
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 5px; font-weight: 600; color: #444; }
-        
         input, select, textarea {
             width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;
             font-size: 1rem; box-sizing: border-box; background: #fafafa;
         }
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--accent-orange); outline: none; background: #fff;
-        }
-
-        /* BUSCADOR Y BOTONES GRANDES */
-        .search-box { display: flex; gap: 10px; }
         .btn-action {
             background-color: var(--primary-blue); color: white; border: none;
             padding: 12px; border-radius: 8px; font-size: 1rem; font-weight: bold;
             cursor: pointer; width: 100%; transition: background 0.3s;
         }
         .btn-action:hover { background-color: var(--accent-orange); }
-        .btn-action:disabled { background-color: #ccc; cursor: not-allowed; }
-        .btn-search { width: auto; min-width: 120px; }
 
-        /* RESULTADOS */
+        /* BUSCADOR */
+        .search-box { display: flex; gap: 10px; }
+        .btn-search { width: auto; min-width: 120px; }
         #resultContainer { margin-top: 20px; display: none; }
         .status-badge { padding: 5px 12px; border-radius: 20px; color: white; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; }
         .detail-row { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 10px 0; }
-        .bg-success { background: var(--success); }
-        .bg-danger { background: var(--danger); }
-        .bg-warning { background: var(--warning); color: #333; }
+        .bg-success { background: #28a745; } .bg-danger { background: #dc3545; } .bg-warning { background: #ffc107; color:#333; }
 
         footer { text-align: center; padding: 30px; color: #888; font-size: 0.85rem; margin-top: 40px; border-top: 1px solid #ddd; }
 
-        /* WHATSAPP FLOTANTE */
+        /* WHATSAPP FLOTANTE (IMAGEN ORIGINAL) */
         .float-whatsapp {
             position: fixed; width: 60px; height: 60px; bottom: 25px; right: 25px;
-            background-color: #25d366; color: #FFF; border-radius: 50px;
-            text-align: center; font-size: 30px; box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
-            z-index: 2000; display: flex; align-items: center; justify-content: center;
-            text-decoration: none; transition: transform 0.3s;
+            z-index: 2000; transition: transform 0.3s;
         }
-        .float-whatsapp:hover { transform: scale(1.1); background-color: #128C7E; }
+        .float-whatsapp img { width: 100%; height: 100%; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3)); }
+        .float-whatsapp:hover { transform: scale(1.1); }
 
-        /* RESPONSIVO (Celulares) */
+        /* RESPONSIVO */
         @media (max-width: 1000px) {
-            .sidebar { display: none; }
-            .main-layout { display: block; }
+            .sidebar { display: none; } .main-layout { display: block; }
         }
-
         @media (max-width: 768px) {
-            /* En móvil, el header vuelve a ser columna para que quepa todo */
             header { flex-direction: column; padding: 15px; position: relative; }
-            body { padding-top: 0; } /* Quitar padding porque header ya no es fijo en móvil para ahorrar pantalla */
-            .header-left { margin-bottom: 15px; }
-            .hero-buttons { width: 100%; flex-direction: column; }
-            .btn-hero { width: 100%; box-sizing: border-box; }
-            .logo-img { height: 60px; } /* Un poco más grande en móvil */
-            .search-box { flex-direction: column; }
-            .btn-search { width: 100%; }
+            body { padding-top: 0; }
+            .logo-img { height: 60px; margin-bottom: 10px; } /* Logo más pequeño en móvil */
+            .hero-buttons { width: 100%; flex-wrap: wrap; justify-content: center; }
+            .btn-hero { flex: 1; min-width: 100px; font-size: 0.8rem; }
+            .search-box { flex-direction: column; } .btn-search { width: 100%; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="header-left">
-            <a href="index.html" class="home-icon" title="Recargar Inicio">🏠</a>
-            <img src="logos/logocrj.png" alt="SoporteCRJ Logo" class="logo-img">
-        </div>
+        <img src="logos/logocrj.png" alt="SoporteCRJ" class="logo-img">
         
         <div class="hero-buttons">
             <a href="#seccion-consulta" class="btn-hero btn-consultar">🔍 Consultar</a>
             <a href="#seccion-soporte" class="btn-hero btn-agendar">📅 Agendar</a>
+            <a href="presupuesto.html" class="btn-hero btn-presupuesto">💰 Presupuesto</a>
             <a href="contrato.html" class="btn-hero btn-contrato">📝 Contrato</a>
         </div>
     </header>
 
     <div class="main-layout">
-
         <aside class="sidebar">
             <div class="ad-banner">
-                <img src="logos/d3xd.png" alt="D3XD Sistema" class="ad-img">
+                <img src="logos/d3xd.png" alt="D3XD" class="ad-img">
                 <h3>Licencias D3XD</h3>
-                <p>Renueva tu sistema a tiempo y evita interrupciones.</p>
-                <a href="#seccion-soporte" class="ad-btn">Renovar Ahora</a>
-            </div>
-            <div class="ad-banner">
-                <h3>Equipos Fiscales</h3>
-                <p>Mantenimiento y venta de impresoras homologadas.</p>
-                <a href="#seccion-soporte" class="ad-btn">Consultar</a>
+                <p>Renueva tu sistema a tiempo.</p>
+                <a href="#seccion-soporte" class="ad-btn">Renovar</a>
             </div>
         </aside>
 
         <main class="center-content">
-            
             <div id="seccion-consulta" class="card">
                 <h2>Estatus de Cliente</h2>
-                <p class="subtitle">Verifica el estado de tu plan y fecha de vencimiento</p>
-                
                 <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="Ingresa RIF o Nombre (Ej. J300739295)">
+                    <input type="text" id="searchInput" placeholder="Ingresa RIF o Nombre">
                     <button class="btn-action btn-search" onclick="buscarCliente()">Buscar</button>
                 </div>
-
                 <div id="resultContainer"></div>
             </div>
 
             <div id="seccion-soporte" class="card">
                 <h2>Solicitud de Soporte</h2>
-                <p class="subtitle">Envía tu requerimiento directamente a nuestro WhatsApp</p>
-                
                 <form id="supportForm">
                     <div class="form-group">
                         <label>Tipo de Solicitud</label>
                         <select id="tipoSolicitud" onchange="toggleDate()">
-                            <option value="Cita Técnica">Agendar Cita Presencial/Remota</option>
-                            <option value="Actualización">Solicitar Actualización D3XD</option>
+                            <option value="Cita Técnica">Agendar Cita</option>
+                            <option value="Actualización">Actualización D3XD</option>
                         </select>
                     </div>
-
-                    <div class="form-group">
-                        <label>Nombre / Empresa</label>
-                        <input type="text" id="nombre" required placeholder="Tu nombre o negocio">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Teléfono / WhatsApp</label>
-                        <input type="tel" id="contacto" required placeholder="0412...">
-                    </div>
-
-                    <div class="form-group" id="dateGroup">
-                        <label>Fecha Preferida</label>
-                        <input type="datetime-local" id="fecha">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Detalles</label>
-                        <textarea id="mensaje" rows="3" placeholder="Describe brevemente lo que necesitas..."></textarea>
-                    </div>
-
+                    <div class="form-group"><label>Nombre</label><input type="text" id="nombre" required></div>
+                    <div class="form-group"><label>Contacto</label><input type="tel" id="contacto" required></div>
+                    <div class="form-group" id="dateGroup"><label>Fecha</label><input type="datetime-local" id="fecha"></div>
+                    <div class="form-group"><label>Detalles</label><textarea id="mensaje" rows="3"></textarea></div>
                     <button type="submit" class="btn-action">Enviar Solicitud 🚀</button>
                 </form>
             </div>
-
         </main>
 
         <aside class="sidebar">
             <div class="ad-banner" style="background: linear-gradient(135deg, var(--primary-blue), #001f4d); color: white;">
                 <h3 style="color:var(--accent-orange)">Soporte Remoto</h3>
-                <p style="color: #ddd;">Atención inmediata vía AnyDesk o TeamViewer.</p>
-                <a href="#seccion-soporte" class="ad-btn" style="background: white; color: var(--primary-blue);">Pedir Ayuda</a>
-            </div>
-            <div class="ad-banner">
-                <h3>Contratos</h3>
-                <p>Genera tu contrato de servicio automáticamente.</p>
-                <a href="contrato.html" class="ad-btn" style="background: var(--accent-orange);">Ir a Contratos</a>
+                <p style="color:#ddd;">Atención inmediata.</p>
+                <a href="#seccion-soporte" class="ad-btn" style="background:white; color:var(--primary-blue);">Pedir Ayuda</a>
             </div>
         </aside>
-
     </div>
 
-    <footer>
-        <p>&copy; 2026 Soportecrj - Soluciones Tecnológicas.</p>
-    </footer>
+    <footer><p>&copy; 2026 Soportecrj - Soluciones Tecnológicas.</p></footer>
 
     <a href="https://wa.me/584129020243?text=quiero%20asistencia%20con%20mi%20sistema" class="float-whatsapp" target="_blank">
-        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24" fill="white"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
     </a>
 
     <script>
-        // URL DE GOOGLE APPS SCRIPT
         const URL_API = "https://script.google.com/macros/s/AKfycbyiqN3cH27fbCs2AWWByBgzx0MhIlPfiOtOOC9qBsFs-nIpQXhP4wN6Y0pXpqL4LuOl/exec";
-        
-        // WHATSAPP
         const TELEFONO_SOPORTE = "584129020243"; 
 
         function buscarCliente() {
             const input = document.getElementById('searchInput').value.trim();
             const container = document.getElementById('resultContainer');
             const btnBuscar = document.querySelector('.btn-search');
-
             if(input === "") { alert("Por favor escribe un RIF o Nombre."); return; }
-
-            btnBuscar.textContent = "Buscando...";
-            btnBuscar.disabled = true;
-            container.style.display = "none";
-
-            fetch(`${URL_API}?action=buscar&q=${input}`)
-            .then(response => response.json())
-            .then(data => {
-                btnBuscar.textContent = "Buscar";
-                btnBuscar.disabled = false;
-                
-                if (data.length > 0) {
-                    mostrarResultado(data[0]); 
-                } else {
-                    container.style.display = "block";
-                    container.innerHTML = `<p style="color: #dc3545; text-align: center; font-weight: bold; padding: 10px; background: #ffebee; border-radius:5px;">❌ Cliente no encontrado en nuestra base de datos.</p>`;
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                btnBuscar.textContent = "Buscar";
-                btnBuscar.disabled = false;
-                alert("Error de conexión. Verifica tu internet.");
-            });
+            btnBuscar.textContent = "Buscando..."; btnBuscar.disabled = true; container.style.display = "none";
+            fetch(`${URL_API}?action=buscar&q=${input}`).then(r => r.json()).then(data => {
+                btnBuscar.textContent = "Buscar"; btnBuscar.disabled = false;
+                if (data.length > 0) mostrarResultado(data[0]);
+                else { container.style.display = "block"; container.innerHTML = `<p style="color:#dc3545;text-align:center;background:#ffebee;padding:10px;">❌ Cliente no encontrado.</p>`; }
+            }).catch(e => { console.error(e); btnBuscar.textContent = "Buscar"; btnBuscar.disabled = false; alert("Error de conexión."); });
         }
 
-        function mostrarResultado(cliente) {
+        function mostrarResultado(c) {
             const container = document.getElementById('resultContainer');
-            const hoy = new Date();
-            const fechaVence = new Date(cliente.vencimiento);
-            const diffTime = fechaVence - hoy;
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-
-            let estadoClase = "", estadoTexto = "";
-
-            if (diffDays < 0) {
-                estadoClase = "bg-danger"; estadoTexto = "VENCIDO";
-            } else if (diffDays <= 30) {
-                estadoClase = "bg-warning"; estadoTexto = "VENCE PRONTO";
-            } else {
-                estadoClase = "bg-success"; estadoTexto = "ACTIVO";
-            }
-
+            const hoy = new Date(); const v = new Date(c.vencimiento);
+            const d = Math.ceil((v - hoy) / (1000 * 60 * 60 * 24)); 
+            let cl = d < 0 ? "bg-danger" : d <= 30 ? "bg-warning" : "bg-success";
+            let tx = d < 0 ? "VENCIDO" : d <= 30 ? "VENCE PRONTO" : "ACTIVO";
             container.style.display = "block";
-            container.innerHTML = `
-                <div style="background: #f8f9fa; border: 1px solid #ddd; padding: 20px; border-radius: 8px;">
-                    <h3 style="margin-top:0; color: #333;">${cliente.nombre}</h3>
-                    <div class="detail-row">
-                        <span>Estatus:</span> <span class="status-badge ${estadoClase}">${estadoTexto}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span>RIF:</span> <strong>${cliente.rif}</strong>
-                    </div>
-                    <div class="detail-row">
-                        <span>Producto:</span> <span>${cliente.tipo}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span>Vencimiento:</span> <strong>${cliente.vencimiento}</strong>
-                    </div>
-                    ${diffDays < 0 ? '<p style="color:red; text-align:center; font-weight:bold; margin-top:10px;">⚠️ Comunícate con soporte para renovar.</p>' : ''}
-                </div>
-            `;
+            container.innerHTML = `<div style="background:#f8f9fa;border:1px solid #ddd;padding:20px;border-radius:8px;">
+                <h3 style="margin-top:0;">${c.nombre}</h3>
+                <div class="detail-row"><span>Estatus:</span><span class="status-badge ${cl}">${tx}</span></div>
+                <div class="detail-row"><span>RIF:</span><strong>${c.rif}</strong></div>
+                <div class="detail-row"><span>Producto:</span><span>${c.tipo}</span></div>
+                <div class="detail-row"><span>Vence:</span><strong>${c.vencimiento}</strong></div>
+                ${d < 0 ? '<p style="color:red;text-align:center;font-weight:bold;">⚠️ Requiere renovación.</p>' : ''}
+            </div>`;
         }
-
-        function toggleDate() {
-            const tipo = document.getElementById('tipoSolicitud').value;
-            const dateGroup = document.getElementById('dateGroup');
-            dateGroup.style.display = (tipo === 'Actualización') ? 'none' : 'block';
-        }
-
+        function toggleDate() { document.getElementById('dateGroup').style.display = document.getElementById('tipoSolicitud').value === 'Actualización' ? 'none' : 'block'; }
         document.getElementById('supportForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            const btnSubmit = document.querySelector('.btn-action[type="submit"]');
-            const textoOriginal = btnSubmit.textContent;
-            
-            const datos = {
-                tipo: document.getElementById('tipoSolicitud').value,
-                nombre: document.getElementById('nombre').value,
-                contacto: document.getElementById('contacto').value,
-                mensaje: document.getElementById('mensaje').value,
-                fecha: document.getElementById('fecha').value
-            };
-
-            btnSubmit.textContent = "Procesando...";
-            btnSubmit.disabled = true;
-
-            fetch(URL_API, {
-                method: 'POST',
-                mode: 'no-cors', 
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(datos)
-            })
+            const btn = document.querySelector('.btn-action[type="submit"]'); const txt = btn.textContent;
+            const d = { tipo: document.getElementById('tipoSolicitud').value, nombre: document.getElementById('nombre').value, contacto: document.getElementById('contacto').value, mensaje: document.getElementById('mensaje').value, fecha: document.getElementById('fecha').value };
+            btn.textContent = "Procesando..."; btn.disabled = true;
+            fetch(URL_API, { method: 'POST', mode: 'no-cors', headers: {'Content-Type':'application/json'}, body: JSON.stringify(d) })
             .then(() => {
-                let textoWS = `Hola Soportecrj, soy *${datos.nombre}*.%0A%0ASolicito: *${datos.tipo}*%0AContacto: ${datos.contacto}`;
-                if (datos.tipo !== 'Actualización' && datos.fecha) textoWS += `%0AFecha sugerida: ${datos.fecha}`;
-                textoWS += `%0ADetalles: ${datos.mensaje}`;
-                
-                window.open(`https://wa.me/${TELEFONO_SOPORTE}?text=${textoWS}`, '_blank');
-                
-                btnSubmit.textContent = textoOriginal;
-                btnSubmit.disabled = false;
-                document.getElementById('supportForm').reset();
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("Abriendo WhatsApp...");
-                let textoWS = `Hola Soportecrj, soy *${datos.nombre}*. (Error al guardar en sistema)`;
-                window.open(`https://wa.me/${TELEFONO_SOPORTE}?text=${textoWS}`, '_blank');
-                
-                btnSubmit.textContent = textoOriginal;
-                btnSubmit.disabled = false;
-            });
+                let url = `https://wa.me/${TELEFONO_SOPORTE}?text=Hola Soportecrj, soy *${d.nombre}*.%0ASolicito: *${d.tipo}*%0AContacto: ${d.contacto}%0ADetalles: ${d.mensaje}`;
+                if(d.fecha) url += `%0AFecha: ${d.fecha}`;
+                window.open(url, '_blank'); btn.textContent = txt; btn.disabled = false; document.getElementById('supportForm').reset();
+            }).catch(() => { alert("Error guardando, abriendo WhatsApp..."); window.open(`https://wa.me/${TELEFONO_SOPORTE}?text=Hola...`, '_blank'); btn.textContent = txt; btn.disabled = false; });
         });
     </script>
 </body>
